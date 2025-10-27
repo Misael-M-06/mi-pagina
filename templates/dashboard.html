@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin Dashboard — JA Molina Construction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+
+    .dashboard-header {
+      background: linear-gradient(135deg, #1e4ca0, #2d5fb8);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* ESTILOS PARA EL LOGO - ESQUINA SUPERIOR IZQUIERDA - TAMAÑO AUMENTADO */
+    .dashboard-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      padding: 8px;
+      border-radius: 12px;
+      z-index: 10;
+    }
+
+    .dashboard-logo:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.02);
+    }
+
+    /* LOGO MEJORADO - TAMAÑO AUMENTADO */
+    .dashboard-logo-img {
+      height: 70px; /* ← AUMENTADO de 60px a 70px */
+      width: auto;
+      max-width: 250px; /* ← AUMENTADO de 200px a 250px */
+      object-fit: contain;
+      transition: all 0.3s ease;
+      filter: brightness(1.1) contrast(1.1) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    }
+
+    /* HOVER EFFECT PARA EL LOGO */
+    .dashboard-logo-img:hover {
+      filter: brightness(1.3) contrast(1.2) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+      transform: scale(1.08);
+    }
+
+    .dashboard-body {
+      padding: 40px;
+    }
+
+    .welcome-message {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .welcome-message h1 {
+      color: #1e4ca0;
+      margin-bottom: 10px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      border-left: 4px solid #1e4ca0;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .logout-btn {
+      background: #e53935;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: #c62828;
+      transform: translateY(-2px);
+    }
+
+    /* Estilos para la tabla de solicitudes */
+    .requests-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      margin-top: 20px;
+    }
+
+    .requests-table th {
+      text-align: left;
+      padding: 12px;
+      background: #f6f8ff;
+      border-bottom: 2px solid #e6eefc;
+      font-weight: 600;
+      color: #1e4ca0;
+    }
+
+    .requests-table td {
+      padding: 12px;
+      border-bottom: 1px solid #f0f3fb;
+      vertical-align: top;
+    }
+
+    .requests-table tr:hover {
+      background: #f8f9fa;
+    }
+
+    .service-badge {
+      background: #e6f0ff;
+      color: #1e4ca0;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    .contact-link {
+      color: #1e4ca0;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .contact-link:hover {
+      text-decoration: underline;
+    }
+
+    .empty-state {
+      padding: 40px;
+      background: #fbfdff;
+      border: 2px dashed #e6eefc;
+      border-radius: 12px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #d1d5db;
+    }
+
+    /* RESPONSIVE - LOGO MEJORADO */
+    @media (max-width: 768px) {
+      .dashboard-logo {
+        top: 15px;
+        left: 15px;
+      }
+      .dashboard-logo-img {
+        height: 55px; /* ← TAMAÑO TABLET AUMENTADO */
+        max-width: 200px;
+      }
+      
+      .dashboard-body {
+        padding: 30px 20px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard-logo {
+        top: 10px;
+        left: 10px;
+      }
+      .dashboard-logo-img {
+        height: 45px; /* ← TAMAÑO MÓVIL AUMENTADO */
+        max-width: 160px;
+      }
+      
+      .dashboard-header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .dashboard-body {
+        padding: 20px 15px;
+      }
+      
+      .requests-table {
+        font-size: 0.85rem;
+      }
+      
+      .requests-table th,
+      .requests-table td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <!-- LOGO EN ESQUINA SUPERIOR IZQUIERDA - TAMAÑO AUMENTADO -->
+      <a href="{{ url_for('home') }}" class="dashboard-logo" aria-label="JA Molina Home">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="JA Molina Construction" class="dashboard-logo-img">
+      </a>
+      
+      <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+      <p>JA Molina Construction Management Portal</p>
+    </div>
+
+    <div class="dashboard-body">
+      <div class="welcome-message">
+        <h1>Welcome back, {{ username }}!</h1>
+        <p>Current time: {{ now.strftime('%B %d, %Y at %I:%M %p') }}</p>
+        
+        <!-- ✅ AGREGAR EMAIL DEL ADMIN -->
+        <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #1e4ca0;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: #1e4ca0;">
+                <i class="fas fa-envelope"></i>
+                <span style="font-weight: 500;">Admin Email: misael@jaconstructionllc.com</span>
+            </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <i class="fas fa-envelope fa-2x" style="color: #1e4ca0; margin-bottom: 10px;"></i>
+          <h3>Contact Requests</h3>
+          <p>Check new client inquiries</p>
+        </div>
+
+        <div class="stat-card">
+          <i class="fas fa-users fa-2x" style="color: #1e4ca0; margin-bottom: 10px;"></i>
+          <h3>Client Management</h3>
+          <p>Manage current projects</p>
+        </div>
+
+        <div class="stat-card">
+          <i class="fas fa-cogs fa-2x" style="color: #1e4ca0; margin-bottom: 10px;"></i>
+          <h3>System Settings</h3>
+          <p>Configure application</p>
+        </div>
+      </div>
+
+      <!-- SECCIÓN DE SOLICITUDES MEJORADA -->
+      <div class="card" style="margin-top: 30px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h3 style="margin: 0 0 20px; color: #1e4ca0; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-envelope-open-text"></i> Recent Requests
+        </h3>
+
+        {% if requests_list and requests_list|length > 0 %}
+          <div style="overflow-x: auto;">
+            <table class="requests-table">
+              <thead>
+                <tr>
+                  <th><i class="fas fa-calendar"></i> Date</th>
+                  <th><i class="fas fa-user"></i> Name</th>
+                  <th><i class="fas fa-envelope"></i> Email</th>
+                  <th><i class="fas fa-phone"></i> Phone</th>
+                  <th><i class="fas fa-wrench"></i> Service</th>
+                  <th><i class="fas fa-comment"></i> Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in requests_list %}
+                <tr>
+                  <td>
+                    {% if r.time.__class__.__name__ == 'datetime' %}
+                      {{ r.time.strftime('%m/%d/%Y') }}<br>
+                      <small style="color: #666;">{{ r.time.strftime('%I:%M %p') }}</small>
+                    {% else %}
+                      {{ r.time }}
+                    {% endif %}
+                  </td>
+                  <td style="font-weight: 600;">{{ r.name }}</td>
+                  <td>
+                    <a href="mailto:{{ r.email }}" class="contact-link">{{ r.email }}</a>
+                  </td>
+                  <td>
+                    <a href="tel:{{ r.phone }}" class="contact-link">{{ r.phone }}</a>
+                  </td>
+                  <td>
+                    <span class="service-badge">{{ r.service }}</span>
+                  </td>
+                  <td style="max-width: 300px;">
+                    <div style="max-height: 80px; overflow-y: auto; white-space: pre-wrap; color: #374151; line-height: 1.4;">
+                      {{ r.description }}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Contador de solicitudes mejorado -->
+          <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px; text-align: center;">
+            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-chart-bar" style="color: #1e4ca0;"></i>
+                <span style="color: #1e4ca0; font-weight: 600;">Total Requests: {{ requests_list|length }}</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-clock" style="color: #28a745;"></i>
+                <span style="color: #28a745; font-weight: 500;">Last Updated: {{ now.strftime('%I:%M %p') }}</span>
+              </div>
+            </div>
+          </div>
+          
+        {% else %}
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h4 style="margin: 0 0 10px; color: #374151;">No requests yet</h4>
+            <p style="margin: 0; font-size: 0.95rem;">When clients submit the contact form, they will appear here.</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="{{ url_for('logout') }}" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer con información de contacto -->
+  <div style="text-align: center; padding: 20px; color: #666;">
+    <p>📧 <a href="mailto:misael@jaconstructionllc.com" style="color: #1e4ca0;">misael@jaconstructionllc.com</a></p>
+    <p>📞 <a href="tel:+14439436081" style="color: #1e4ca0;">(443) 943-6081</a></p>
+    <p>JA Molina Construction - Professional Services in Maryland</p>
+  </div>
+</body>
+</html>

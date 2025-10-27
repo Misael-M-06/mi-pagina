@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JA Molina Construction - Roofing & Exterior Services</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Barra de información superior */
+        .info-bar {
+            width: 100%;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 1002;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-social {
+            margin-left: 30px;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .info-social a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .info-social a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .info-phone {
+            margin-right: 30px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .info-phone a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 15px;
+            background: rgba(52, 152, 219, 0.3);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .info-phone a:hover {
+            background: rgba(52, 152, 219, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Navegación principal */
+        .nav {
+            position: fixed;
+            top: 35px;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            background: rgba(30, 76, 160, 0.98);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(30, 76, 160, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(30, 76, 160, 0.95) 0%, 
+                rgba(45, 91, 184, 0.95) 50%, 
+                rgba(30, 76, 160, 0.95) 100%);
+            z-index: -1;
+        }
+
+        .wrap {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 110px;
+            padding: 0 40px;
+            position: relative;
+        }
+
+        /* Logo */
+        .brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            flex-shrink: 0;
+            z-index: 10;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .brand:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .brand-logo {
+            height: 90px;
+            width: auto;
+            max-width: 350px;
+            object-fit: contain;
+            transition: all 0.3s ease;
+            filter: brightness(1.1) contrast(1.1) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+        }
+
+        .brand-logo:hover {
+            filter: brightness(1.3) contrast(1.2) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+            transform: scale(1.08);
+        }
+
+        /* Links de navegación */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 12px 20px;
+            position: relative;
+            border-radius: 25px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #3498db;
+            background: rgba(52, 152, 219, 0.15);
+            border-color: rgba(52, 152, 219, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        .nav-link:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Botón CTA */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #a93226 100%);
+            color: #fff !important;
+            padding: 15px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-cta:hover::before {
+            opacity: 1;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(231, 76, 60, 0.6);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-cta:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-cta i {
+            font-size: 1rem;
+            margin-right: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-cta:hover i {
+            transform: translateX(2px);
+        }
+
+        /* Contenido principal */
+        .main-content {
+            padding-top: 0;
+            min-height: 100vh;
+        }
+
+        .main-section {
+            display: none;
+            animation: fadeInContent 0.5s ease-in-out;
+            padding-top: 0;
+        }
+
+        .main-section.active {
+            display: block;
+        }
+
+        .main-section#home {
+            padding-top: 150px !important;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .wrap {
+                padding: 0 30px;
+            }
+            
+            .nav-links {
+                gap: 12px;
+            }
+            
+            .nav-link {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .btn-cta {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .brand-logo {
+                height: 75px;
+                max-width: 300px;
+            }
+            
+            .main-section#home {
+                padding-top: 130px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .info-bar {
+                flex-direction: column;
+                padding: 6px 0;
+                font-size: 0.8rem;
+                gap: 10px;
+            }
+            
+            .info-social,
+            .info-phone {
+                margin: 0;
+            }
+            
+            .nav {
+                top: 30px;
+            }
+            
+            .wrap {
+                flex-direction: column;
+                height: 85px;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+            
+            .brand-logo {
+                height: 70px;
+                max-width: 280px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin: 0;
+            }
+            
+            .nav-link {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+            
+            .btn-cta {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .main-section#home {
+                padding-top: 115px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .btn-cta {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+            
+            .brand-logo {
+                height: 60px;
+                max-width: 240px;
+            }
+            
+            .wrap {
+                height: 75px;
+            }
+            
+            .main-section#home {
+                padding-top: 105px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top info bar -->
+    <div class="info-bar">
+        <div class="info-social">
+            <a href="https://www.facebook.com/jamolinaconstruction" target="_blank" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            <!-- ✅ AGREGAR EMAIL AQUÍ: -->
+            <a href="mailto:misael@jaconstructionllc.com" aria-label="Email">
+                <i class="fas fa-envelope"></i> Email Us
+            </a>
+        </div>
+        <div class="info-phone">
+            <a href="tel:+14439436081">📞 +1 (443) 943-6081</a>
+        </div>
+    </div>
+
+    <!-- Main navigation bar -->
+    <nav class="nav">
+        <div class="wrap">
+            <a class="brand" href="{{ url_for('home') }}" aria-label="JA Molina Home">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="JA Molina Construction" class="brand-logo">
+            </a>
+
+            <div class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About us</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="{{ url_for('form_view') }}" class="btn-cta">
+                    <i class="fas fa-paper-plane"></i>&nbsp;Free Estimate
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content container -->
+    <div class="main-content">
+        
+        <!-- HOME SECTION -->
+        <section id="home" class="main-section active">
+            <!-- Hero section -->
+            <header class="hero" style="
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                min-height: 100vh; 
+                background: linear-gradient(135deg, rgba(30, 76, 160, 0.85) 0%, rgba(45, 91, 184, 0.85) 100%), url('/static/IMG_6888.jpg');
+                background-size: cover; 
+                background-position: center; 
+                background-repeat: no-repeat; 
+                position: relative; 
+                margin: 0; 
+                padding: 0;
+            ">
+                <div class="hero-container" style="
+                    max-width: 1400px; 
+                    width: 100%; 
+                    display: grid; 
+                    grid-template-columns: 1fr 1fr; 
+                    gap: 60px; 
+                    padding: 40px; 
+                    align-items: center;
+                ">
+                    <!-- Contenido izquierdo -->
+                    <div class="hero-left" style="
+                        color: #fff; 
+                        animation: slideInLeft 0.8s ease-out;
+                    ">
+                        <h1 style="
+                            font-size: 3.5rem; 
+                            font-weight: 900; 
+                            margin-bottom: 25px; 
+                            line-height: 1.2; 
+                            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                            background: linear-gradient(45deg, #fff, #ffd700, #ff8c00);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                        ">
+                            Your #1 Roofing & Exterior Services in Maryland
+                        </h1>
+                        
+                        <p style="
+                            font-size: 1.3rem; 
+                            margin-bottom: 35px; 
+                            line-height: 1.6; 
+                            color: rgba(255, 255, 255, 0.95);
+                            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+                        ">
+                            Specializing in premium roofing, siding, landscaping, patios, gutters, and more for homes and businesses across Maryland.
+                        </p>
+
+                        <div class="hero-features" style="
+                            display: flex; 
+                            flex-wrap: wrap; 
+                            gap: 20px; 
+                            margin-bottom: 40px;
+                        ">
+                            <div style="
+                                display: flex; 
+                                align-items: center; 
+                                background: rgba(255, 255, 255, 0.15); 
+                                padding: 12px 20px; 
+                                border-radius: 25px; 
+                                backdrop-filter: blur(10px);
+                            ">
+                                <i class="fas fa-shield-alt" style="color: #ffd700; margin-right: 10px; font-size: 1.2rem;"></i>
+                                <span style="font-weight: 600;">1-Year Warranty</span>
+                            </div>
+                            <div style="
+                                display: flex; 
+                                align-items: center; 
+                                background: rgba(255, 255, 255, 0.15); 
+                                padding: 12px 20px; 
+                                border-radius: 25px; 
+                                backdrop-filter: blur(10px);
+                            ">
+                                <i class="fas fa-dollar-sign" style="color: #ffd700; margin-right: 10px; font-size: 1.2rem;"></i>
+                                <span style="font-weight: 600;">Free Estimates</span>
+                            </div>
+                        </div>
+
+                        <a href="{{ url_for('form_view') }}" style="
+                            display: inline-flex;
+                            align-items: center;
+                            background: linear-gradient(135deg, #e53935, #c62828);
+                            color: #fff;
+                            padding: 18px 35px;
+                            border-radius: 50px;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            text-decoration: none;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            box-shadow: 0 8px 30px rgba(229, 57, 53, 0.4);
+                            transition: all 0.3s ease;
+                        " 
+                        onmouseover="this.style.transform='translateY(-3px) scale(1.05)'; this.style.boxShadow='0 12px 40px rgba(229, 57, 53, 0.6)'"
+                        onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 8px 30px rgba(229, 57, 53, 0.4)'"
+                        >
+                            <i class="fas fa-rocket" style="margin-right: 10px; font-size: 1.1rem;"></i>
+                            Get Free Estimate
+                        </a>
+                    </div>
+
+                    <!-- Formulario derecho -->
+                    <div class="hero-right" style="
+                        background: rgba(255, 255, 255, 0.95);
+                        border-radius: 20px;
+                        padding: 40px;
+                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+                        backdrop-filter: blur(20px);
+                        animation: slideInRight 0.8s ease-out;
+                    ">
+                        <h2 style="
+                            font-size: 2.2rem; 
+                            font-weight: 800; 
+                            color: #2c3e50; 
+                            text-align: center; 
+                            margin-bottom: 30px;
+                        ">
+                            Get Your Free Estimate
+                        </h2>
+                        
+                        <form id="heroForm" method="GET" action="{{ url_for('form_view') }}" style="
+                            display: grid; 
+                            gap: 20px;
+                        ">
+                            <div class="form-group">
+                                <input type="text" name="name" required placeholder="Full Name *" style="
+                                    width: 100%;
+                                    padding: 15px 20px;
+                                    border: 2px solid #e0e0e0;
+                                    border-radius: 10px;
+                                    font-size: 1rem;
+                                    transition: all 0.3s ease;
+                                    background: #fafafa;
+                                " 
+                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'; this.style.transform='translateY(-2px)'"
+                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'; this.style.transform='translateY(0)'"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <input type="email" name="email" required placeholder="Email Address *" style="
+                                    width: 100%;
+                                    padding: 15px 20px;
+                                    border: 2px solid #e0e0e0;
+                                    border-radius: 10px;
+                                    font-size: 1rem;
+                                    transition: all 0.3s ease;
+                                    background: #fafafa;
+                                "
+                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'; this.style.transform='translateY(-2px)'"
+                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'; this.style.transform='translateY(0)'"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <input type="tel" name="phone" required placeholder="Phone Number *" style="
+                                    width: 100%;
+                                    padding: 15px 20px;
+                                    border: 2px solid #e0e0e0;
+                                    border-radius: 10px;
+                                    font-size: 1rem;
+                                    transition: all 0.3s ease;
+                                    background: #fafafa;
+                                "
+                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'; this.style.transform='translateY(-2px)'"
+                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'; this.style.transform='translateY(0)'"
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <select name="service" required style="
+                                    width: 100%;
+                                    padding: 15px 20px;
+                                    border: 2px solid #e0e0e0;
+                                    border-radius: 10px;
+                                    font-size: 1rem;
+                                    transition: all 0.3s ease;
+                                    background: #fafafa;
+                                    cursor: pointer;
+                                "
+                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'"
+                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'"
+                                >
+                                    <option value="" disabled selected>Select a Service *</option>
+                                    <option value="metal-roofing">Metal Roofing</option>
+                                    <option value="shingle-roofing">Shingle Roofing</option>
+                                    <option value="siding">Siding Installation</option>
+                                    <option value="landscaping">Landscaping</option>
+                                    <option value="patios">Patios & Decks</option>
+                                    <option value="gutters">Gutters</option>
+                                    <option value="other">Other Services</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea name="description" rows="3" placeholder="Tell us about your project..." style="
+                                    width: 100%;
+                                    padding: 15px 20px;
+                                    border: 2px solid #e0e0e0;
+                                    border-radius: 10px;
+                                    font-size: 1rem;
+                                    transition: all 0.3s ease;
+                                    background: #fafafa;
+                                    resize: vertical;
+                                    min-height: 80px;
+                                "
+                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'"
+                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'"
+                                ></textarea>
+                            </div>
+
+                            <button type="submit" style="
+                                background: linear-gradient(135deg, #e53935, #c62828);
+                                color: #fff;
+                                padding: 18px 30px;
+                                border: none;
+                                border-radius: 10px;
+                                font-size: 1.1rem;
+                                font-weight: 700;
+                                text-transform: uppercase;
+                                letter-spacing: 1px;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 6px 20px rgba(229, 57, 53, 0.3);
+                            "
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 30px rgba(229, 57, 53, 0.5)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(229, 57, 53, 0.3)'"
+                            >
+                                <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>
+                                Send Request
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Sección Why Choose Us -->
+            <section style="
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+                padding: 10px 20px 60px 20px;
+            ">
+                <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                    <h2 style="
+                        font-size: 2.5rem; 
+                        font-weight: 800; 
+                        color: #2c3e50; 
+                        margin-bottom: 20px;
+                    ">Why Choose JA Molina Construction?</h2>
+                    
+                    <p style="
+                        font-size: 1.2rem; 
+                        color: #666; 
+                        max-width: 600px; 
+                        margin: 0 auto 50px;
+                    ">A new company with a big mission: to offer honest, affordable, and professional services in Maryland.</p>
+
+                    <div style="
+                        display: grid; 
+                        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+                        gap: 40px; 
+                        margin-top: 50px;
+                    ">
+                        <div style="
+                            background: #fff;
+                            padding: 40px 30px;
+                            border-radius: 15px;
+                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                            transition: transform 0.3s ease;
+                        " 
+                        onmouseover="this.style.transform='translateY(-10px)'"
+                        onmouseout="this.style.transform='translateY(0)'"
+                        >
+                            <div style="
+                                width: 70px; 
+                                height: 70px; 
+                                background: linear-gradient(135deg, #1e4ca0, #2d5fb8); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-award" style="color: #fff; font-size: 2rem;"></i>
+                            </div>
+                            <h3 style="
+                                font-size: 1.5rem; 
+                                font-weight: 700; 
+                                color: #e53935; 
+                                margin-bottom: 15px;
+                            ">Professional Quality</h3>
+                            <p style="color: #666; line-height: 1.6;">
+                                Expert craftsmanship with attention to detail that ensures your project stands the test of time.
+                            </p>
+                        </div>
+
+                        <div style="
+                            background: #fff;
+                            padding: 40px 30px;
+                            border-radius: 15px;
+                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                            transition: transform 0.3s ease;
+                        "
+                        onmouseover="this.style.transform='translateY(-10px)'"
+                        onmouseout="this.style.transform='translateY(0)'"
+                        >
+                            <div style="
+                                width: 70px; 
+                                height: 70px; 
+                                background: linear-gradient(135deg, #e53935, #c62828); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-dollar-sign" style="color: #fff; font-size: 2rem;"></i>
+                            </div>
+                            <h3 style="
+                                font-size: 1.5rem; 
+                                font-weight: 700; 
+                                color: #e53935; 
+                                margin-bottom: 15px;
+                            ">Affordable Pricing</h3>
+                            <p style="color: #666; line-height: 1.6;">
+                                Competitive rates without compromising on quality. Free estimates always!
+                            </p>
+                        </div>
+
+                        <div style="
+                            background: #fff;
+                            padding: 40px 30px;
+                            border-radius: 15px;
+                            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                            transition: transform 0.3s ease;
+                        "
+                        onmouseover="this.style.transform='translateY(-10px)'"
+                        onmouseout="this.style.transform='translateY(0)'"
+                        >
+                            <div style="
+                                width: 70px; 
+                                height: 70px; 
+                                background: linear-gradient(135deg, #ffd700, #ff8c00); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-shield-alt" style="color: #fff; font-size: 2rem;"></i>
+                            </div>
+                            <h3 style="
+                                font-size: 1.5rem; 
+                                font-weight: 700; 
+                                color: #e53935; 
+                                margin-bottom: 15px;
+                            ">1-Year Warranty</h3>
+                            <p style="color: #666; line-height: 1.6;">
+                                We stand behind our work with a comprehensive 1-year labor warranty on all projects.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Final -->
+            <section style="
+                background: linear-gradient(135deg, #1e4ca0 0%, #2d5fb8 100%);
+                color: #fff;
+                padding: 80px 20px;
+                text-align: center;
+            ">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <h2 style="
+                        font-size: 3rem; 
+                        font-weight: 800; 
+                        margin-bottom: 25px;
+                        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                        background: linear-gradient(45deg, #fff, #ffd700);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        background-clip: text;
+                    ">Ready to Start Your Project?</h2>
+                    
+                    <p style="
+                        font-size: 1.3rem; 
+                        margin-bottom: 40px; 
+                        opacity: 0.9;
+                        line-height: 1.6;
+                    ">
+                        Contact us today for a free, no-obligation estimate and discover how we can help transform your property.
+                    </p>
+
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <a href="{{ url_for('form_view') }}" style="
+                            display: inline-flex;
+                            align-items: center;
+                            background: linear-gradient(135deg, #e53935, #c62828);
+                            color: #fff;
+                            padding: 18px 35px;
+                            border-radius: 50px;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            text-decoration: none;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            box-shadow: 0 8px 30px rgba(229, 57, 53, 0.4);
+                            transition: all 0.3s ease;
+                        "
+                        onmouseover="this.style.transform='translateY(-3px) scale(1.05)'; this.style.boxShadow='0 12px 40px rgba(229, 57, 53, 0.6)'"
+                        onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 8px 30px rgba(229, 57, 53, 0.4)'"
+                        >
+                            <i class="fas fa-rocket" style="margin-right: 10px;"></i>
+                            Get Free Estimate
+                        </a>
+
+                        <a href="tel:+14439436081" style="
+                            display: inline-flex;
+                            align-items: center;
+                            background: rgba(255, 255, 255, 0.1);
+                            color: #fff;
+                            padding: 18px 35px;
+                            border-radius: 50px;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            text-decoration: none;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            border: 2px solid rgba(255, 255, 255, 0.2);
+                            transition: all 0.3s ease;
+                            backdrop-filter: blur(10px);
+                        "
+                        onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'; this.style.transform='translateY(-3px)'"
+                        onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='translateY(0)'"
+                        >
+                            <i class="fas fa-phone" style="margin-right: 10px;"></i>
+                            Call Now
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- ABOUT US SECTION -->
+        <section id="about" class="main-section">
+            <div style="padding: 10px 20px 40px 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);">
+                <div style="max-width: 1200px; margin: 0 auto;">
+                    <div style="
+                        display: grid; 
+                        grid-template-columns: 1fr 1fr; 
+                        gap: 60px; 
+                        align-items: center;
+                        background: #fff;
+                        border-radius: 20px;
+                        padding: 60px;
+                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+                    ">
+                        <div>
+                            <h2 style="
+                                font-size: 2.8rem; 
+                                font-weight: 800; 
+                                color: #2c3e50; 
+                                margin-bottom: 30px;
+                            ">About JA Molina Construction</h2>
+                            
+                            <p style="
+                                font-size: 1.2rem; 
+                                line-height: 1.7; 
+                                color: #555; 
+                                margin-bottom: 25px;
+                            ">
+                                At JA Molina Construction, we are committed to providing high-quality construction and property improvement services for both residential and commercial clients.
+                            </p>
+                            
+                            <p style="
+                                font-size: 1.2rem; 
+                                line-height: 1.7; 
+                                color: #555; 
+                                margin-bottom: 25px;
+                            ">
+                                With a strong foundation built on integrity, hard work, and customer satisfaction, our company specializes in roofing, landscaping, fencing, patios, and more.
+                            </p>
+
+                            <div style="
+                                display: flex; 
+                                gap: 30px; 
+                                margin-top: 40px;
+                            ">
+                                <div style="text-align: center;">
+                                    <div style="
+                                        font-size: 2.5rem; 
+                                        font-weight: 800; 
+                                        color: #ffd700;
+                                    ">100+</div>
+                                    <div style="color: #666;">Projects</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="
+                                        font-size: 2.5rem; 
+                                        font-weight: 800; 
+                                        color: #ffd700;
+                                    ">5★</div>
+                                    <div style="color: #666;">Rating</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div style="
+                                        font-size: 2.5rem; 
+                                        font-weight: 800; 
+                                        color: #ffd700;
+                                    ">1 Year</div>
+                                    <div style="color: #666;">Warranty</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="position: relative;">
+                            <img src="{{ url_for('static', filename='IMG_7021.PNG') }}" alt="JA Molina Construction" style="
+                                width: 100%;
+                                border-radius: 15px;
+                                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+                            " />
+                            <img src="{{ url_for('static', filename='IMG_7023.PNG') }}" alt="Construction Detail" style="
+                                position: absolute;
+                                bottom: -30px;
+                                right: -30px;
+                                width: 200px;
+                                border-radius: 10px;
+                                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                                border: 5px solid #fff;
+                            " />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES SECTION -->
+        <section id="services" class="main-section">
+            <div style="padding: 10px 20px 40px 20px; background: linear-gradient(135deg, #fff 0%, #f8f9fa 50%, #f1f3f4 100%);">
+                <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                    <h2 style="
+                        font-size: 2.8rem; 
+                        font-weight: 800; 
+                        color: #2c3e50; 
+                        margin-bottom: 20px;
+                    ">Our Services</h2>
+                    
+                    <p style="
+                        font-size: 1.2rem; 
+                        color: #666; 
+                        max-width: 600px; 
+                        margin: 0 auto 60px;
+                    ">Professional construction and exterior services tailored to your needs</p>
+
+                    <div style="
+                        display: grid; 
+                        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+                        gap: 30px;
+                    ">
+                        <div style="
+                            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                            padding: 40px 30px;
+                            border-radius: 20px;
+                            transition: transform 0.3s ease;
+                            border: 1px solid #e0e0e0;
+                        "
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                        >
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                background: linear-gradient(135deg, #1e4ca0, #2d5fb8); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-home" style="color: #fff; font-size: 2.2rem;"></i>
+                            </div>
+                            <h3 style="font-size: 1.6rem; font-weight: 700; color: #e53935; margin-bottom: 15px;">Metal Roofing</h3>
+                            <p style="color: #666; line-height: 1.6;">Installation of standing seam, corrugated metal, and other durable roofing systems.</p>
+                        </div>
+
+                        <div style="
+                            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                            padding: 40px 30px;
+                            border-radius: 20px;
+                            transition: transform 0.3s ease;
+                            border: 1px solid #e0e0e0;
+                        "
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                        >
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                background: linear-gradient(135deg, #e53935, #c62828); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-layer-group" style="color: #fff; font-size: 2.2rem;"></i>
+                            </div>
+                            <h3 style="font-size: 1.6rem; font-weight: 700; color: #e53935; margin-bottom: 15px;">Shingle Roofing</h3>
+                            <p style="color: #666; line-height: 1.6;">Expert installation and repair of asphalt shingles for residential properties.</p>
+                        </div>
+
+                        <div style="
+                            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                            padding: 40px 30px;
+                            border-radius: 20px;
+                            transition: transform 0.3s ease;
+                            border: 1px solid #e0e0e0;
+                        "
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                        >
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                background: linear-gradient(135deg, #ffd700, #ff8c00); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-tools" style="color: #fff; font-size: 2.2rem;"></i>
+                            </div>
+                            <h3 style="font-size: 1.6rem; font-weight: 700; color: #e53935; margin-bottom: 15px;">Siding Installation</h3>
+                            <p style="color: #666; line-height: 1.6;">Professional siding services to protect and beautify your home's exterior.</p>
+                        </div>
+
+                        <div style="
+                            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                            padding: 40px 30px;
+                            border-radius: 20px;
+                            transition: transform 0.3s ease;
+                            border: 1px solid #e0e0e0;
+                        "
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                        >
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                background: linear-gradient(135deg, #28a745, #20c997); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-seedling" style="color: #fff; font-size: 2.2rem;"></i>
+                            </div>
+                            <h3 style="font-size: 1.6rem; font-weight: 700; color: #e53935; margin-bottom: 15px;">Landscaping</h3>
+                            <p style="color: #666; line-height: 1.6;">Complete landscaping solutions to enhance your property's curb appeal.</p>
+                        </div>
+
+                        <div style="
+                            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                            padding: 40px 30px;
+                            border-radius: 20px;
+                            transition: transform 0.3s ease;
+                            border: 1px solid #e0e0e0;
+                        "
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                        >
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                background: linear-gradient(135deg, #6f42c1, #e83e8c); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-umbrella-beach" style="color: #fff; font-size: 2.2rem;"></i>
+                            </div>
+                            <h3 style="font-size: 1.6rem; font-weight: 700; color: #e53935; margin-bottom: 15px;">Patios & Decks</h3>
+                            <p style="color: #666; line-height: 1.6;">Custom patio and deck construction for outdoor entertainment spaces.</p>
+                        </div>
+
+                        <div style="
+                            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                            padding: 40px 30px;
+                            border-radius: 20px;
+                            transition: transform 0.3s ease;
+                            border: 1px solid #e0e0e0;
+                        "
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                        >
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                background: linear-gradient(135deg, #17a2b8, #6c757d); 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                margin: 0 auto 25px;
+                            ">
+                                <i class="fas fa-tint" style="color: #fff; font-size: 2.2rem;"></i>
+                            </div>
+                            <h3 style="font-size: 1.6rem; font-weight: 700; color: #e53935; margin-bottom: 15px;">Gutters</h3>
+                            <p style="color: #666; line-height: 1.6;">Gutter installation, repair, and maintenance to protect your foundation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY SECTION -->
+        <section id="gallery" class="main-section">
+            <div style="padding: 60px 20px; background: linear-gradient(135deg, #f1f3f4 0%, #e9ecef 50%, #dee2e6 100%);">
+                <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+                    <h2 style="
+                        font-size: 2.8rem; 
+                        font-weight: 800; 
+                        color: #2c3e50; 
+                        margin-bottom: 50px;
+                    ">Our Work Gallery</h2>
+
+                    <div style="
+                        display: grid; 
+                        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+                        gap: 30px;
+                        align-items: start;
+                        justify-items: center;
+                    ">
+                        <!-- Card 1 -->
+                        <div style="
+                            position: relative; 
+                            width: 100%;
+                            max-width: 400px;
+                            border-radius: 15px; 
+                            overflow: hidden; 
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+                            transition: all 0.3s ease;
+                            background: #fff;
+                        "
+                        onmouseover="this.style.transform='scale(1.03) translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.25)'"
+                        onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'"
+                        >
+                            <div style="
+                                width: 100%;
+                                height: 280px;
+                                overflow: hidden;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <img src="{{ url_for('static', filename='IMG_7021.PNG') }}" alt="Metal Roofing Project" style="
+                                    width: 100%; 
+                                    height: 100%; 
+                                    object-fit: cover;
+                                    object-position: center;
+                                " />
+                            </div>
+                            <div style="
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+                                color: #fff;
+                                padding: 30px 20px 20px;
+                            ">
+                                <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 5px;">Metal Roofing Installation</h3>
+                                <p style="opacity: 0.9; font-size: 0.9rem;">Professional metal roof installation in Maryland</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div style="
+                            position: relative; 
+                            width: 100%;
+                            max-width: 400px;
+                            border-radius: 15px; 
+                            overflow: hidden; 
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+                            transition: all 0.3s ease;
+                            background: #fff;
+                        "
+                        onmouseover="this.style.transform='scale(1.03) translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.25)'"
+                        onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'"
+                        >
+                            <div style="
+                                width: 100%;
+                                height: 280px;
+                                overflow: hidden;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <img src="{{ url_for('static', filename='IMG_7023.PNG') }}" alt="Exterior Construction" style="
+                                    width: 100%; 
+                                    height: 100%; 
+                                    object-fit: cover;
+                                    object-position: center;
+                                " />
+                            </div>
+                            <div style="
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+                                color: #fff;
+                                padding: 30px 20px 20px;
+                            ">
+                                <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 5px;">Exterior Construction</h3>
+                                <p style="opacity: 0.9; font-size: 0.9rem;">Quality construction and exterior services</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div style="
+                            position: relative; 
+                            width: 100%;
+                            max-width: 400px;
+                            border-radius: 15px; 
+                            overflow: hidden; 
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+                            transition: all 0.3s ease;
+                            background: #fff;
+                        "
+                        onmouseover="this.style.transform='scale(1.03) translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.25)'"
+                        onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'"
+                        >
+                            <div style="
+                                width: 100%;
+                                height: 280px;
+                                overflow: hidden;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <img src="{{ url_for('static', filename='IMG_6888.jpg') }}" alt="Complete Projects" style="
+                                    width: 100%; 
+                                    height: 100%; 
+                                    object-fit: cover;
+                                    object-position: center;
+                                " />
+                            </div>
+                            <div style="
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+                                color: #fff;
+                                padding: 30px 20px 20px;
+                            ">
+                                <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 5px;">Complete Projects</h3>
+                                <p style="opacity: 0.9; font-size: 0.9rem;">Comprehensive construction solutions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: #1e355e; color: #fff; padding: 40px 20px 20px 20px; text-align: center;">
+        <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px;">
+            <div>
+                <h3 style="margin-bottom: 15px;">Contact Info</h3>
+                <p>📞 <a href="tel:+14439436081" style="color: #fff; text-decoration: none;">+1 (443) 943-6081</a></p>
+                <p>📧 <a href="mailto:misael@jaconstructionllc.com" style="color: #fff; text-decoration: none;">misael@jaconstructionllc.com</a></p>
+                <p>📍 Maryland, USA</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 15px;">Services</h3>
+                <p>Metal & Shingle Roofing</p>
+                <p>Siding Installation</p>
+                <p>Landscaping & Patios</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 15px;">Follow Us</h3>
+                <a href="https://www.facebook.com/jamolinaconstruction" style="color: #fff; margin-right: 15px;">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </a>
+                <a href="#" style="color: #fff;">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #444; padding-top: 20px;">
+            <p>&copy; 2024 JA Molina Construction. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // SPA Navigation System
+        function showSection(targetId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.main-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección objetivo
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Actualizar enlaces activos
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            const activeLink = document.querySelector(`.nav-link[href="#${targetId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            // Scroll al inicio SIEMPRE
+            window.scrollTo({ 
+                top: 0, 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Event listeners para los enlaces de navegación
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                showSection(targetId);
+                
+                // Actualizar URL sin recargar la página
+                if (history.pushState) {
+                    history.pushState(null, null, `#${targetId}`);
+                }
+            });
+        });
+
+        // Manejar navegación con botones del navegador
+        window.addEventListener('popstate', function() {
+            const hash = window.location.hash.substring(1) || 'home';
+            showSection(hash);
+        });
+
+        // Mostrar sección correcta al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.substring(1) || 'home';
+            showSection(hash);
+        });
+
+        // Mejorar efectos visuales en botones CTA
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px) scale(1.05)';
+                this.style.boxShadow = '0 8px 25px rgba(229, 57, 53, 0.4)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = '0 4px 12px rgba(229, 57, 53, 0.3)';
+            });
+        });
+    </script>
+
+    <!-- Scripts externos -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+</body>
+</html>

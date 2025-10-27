@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Login - JA Molina Construction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .login-container {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #1e4ca0, #2d5fb8);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .company-logo {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .login-header h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .login-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-body {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1e4ca0;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(30, 76, 160, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-input:valid:not(:placeholder-shown) {
+            border-color: #4caf50;
+            background: #f8fff8;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #1e4ca0;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #e53935, #c62828);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(229, 57, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(229, 57, 53, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .login-footer {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .security-notice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e4ca0;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .input-highlight {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 2px;
+            width: 0;
+            background: linear-gradient(135deg, #1e4ca0, #2d5fb8);
+            transition: width 0.3s ease;
+        }
+
+        .form-input:focus + .input-highlight {
+            width: 100%;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .login-header {
+                padding: 30px 20px;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .login-body {
+                padding: 30px 20px;
+            }
+
+            .back-btn {
+                top: 15px;
+                left: 15px;
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Estilos para los mensajes flash */
+        .flash-message {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 12px;
+            border-radius: 4px;
+        }
+
+        .flash-message i {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .flash-success {
+            background: #e8f5e8;
+            color: #1b5e20;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .flash-info {
+            background: #e6f0ff;
+            color: #0b51b7;
+            border-left: 4px solid #1e4ca0;
+        }
+
+        .flash-error {
+            background: #ffeaea;
+            color: #c62828;
+            border-left: 4px solid #e53935;
+        }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('home') }}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="login-container">
+        <div class="login-header">
+            <div class="company-logo">
+                <i class="fas fa-tools"></i>
+            </div>
+            <h1>
+                <i class="fas fa-shield-alt"></i>
+                Administrator Access
+            </h1>
+            <p>JA Molina Construction Portal</p>
+        </div>
+
+        <div class="login-body">
+            {% with msgs = get_flashed_messages(with_categories=true) %}
+              {% if msgs %}
+                {% for cat, msg in msgs %}
+                  <div class="flash-message flash-{{ cat }}">
+                    <i class="fas {% if cat=='success' %}fa-check-circle{% elif cat=='info' %}fa-info-circle{% else %}fa-exclamation-triangle{% endif %}"></i>
+                    <span>{{ msg }}</span>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+              <!-- CSRF Token -->
+              <input type="hidden" name="csrf_token" value="{{ g.csrf_token }}">
+              
+              <!-- Username Field -->
+              <div class="form-group">
+                <label class="form-label" for="username">
+                  <i class="fas fa-user"></i> Username
+                </label>
+                <input class="form-input" type="text" id="username" name="username"
+                       placeholder="Enter your username" autocomplete="username" 
+                       required value="{{ last_user or '' }}">
+                <div class="input-highlight"></div>
+              </div>
+
+              <!-- Password Field -->
+              <div class="form-group">
+                <label class="form-label" for="password">
+                  <i class="fas fa-lock"></i> Password
+                </label>
+                <div class="password-container">
+                  <input class="form-input" type="password" id="password" name="password"
+                         placeholder="Enter your password" autocomplete="current-password" required>
+                  <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                </div>
+                <div class="input-highlight"></div>
+              </div>
+
+              <!-- Submit Button -->
+              <button class="login-btn" type="submit" id="loginBtn">
+                <span id="btnText">
+                  <i class="fas fa-sign-in-alt"></i> Sign In
+                </span>
+                <span class="loading" id="btnLoading">
+                  <div class="spinner"></div>
+                  Authenticating...
+                </span>
+              </button>
+            </form>
+        </div>
+
+        <div class="login-footer">
+            <p><strong>Secure Administrator Portal</strong></p>
+            <div class="security-notice">
+                <i class="fas fa-lock"></i>
+                <span>This page is protected by SSL encryption</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordField = document.getElementById('password');
+            const usernameField = document.getElementById('username');
+
+            // Password visibility toggle
+            if (togglePassword && passwordField) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    
+                    // Toggle icon
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+
+            // Form submission with loading state
+            if (form && loginBtn) {
+                form.addEventListener('submit', function(e) {
+                    // Show loading state
+                    loginBtn.disabled = true;
+                    if (btnText) btnText.style.display = 'none';
+                    if (btnLoading) btnLoading.style.display = 'flex';
+                });
+            }
+
+            // Input focus effects
+            const inputs = document.querySelectorAll('.form-input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    // Remove any existing error styling
+                    this.style.borderColor = '#1e4ca0';
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.style.borderColor = '#e0e0e0';
+                    }
+                });
+
+                input.addEventListener('input', function() {
+                    if (this.value.length > 0) {
+                        this.style.borderColor = '#1e4ca0';
+                    } else {
+                        this.style.borderColor = '#e0e0e0';
+                    }
+                });
+            });
+
+            // Auto-focus username field
+            if (usernameField) {
+                usernameField.focus();
+            }
+
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Enter key submits form (only if not already focused on button)
+                if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON' && form) {
+                    e.preventDefault();
+                    form.submit();
+                }
+                
+                // Escape key clears form
+                if (e.key === 'Escape' && form) {
+                    form.reset();
+                    if (usernameField) usernameField.focus();
+                }
+            });
+
+            // Auto-hide flash messages after 5 seconds
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(message) {
+                setTimeout(function() {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translateY(-10px)';
+                    setTimeout(function() {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>
+

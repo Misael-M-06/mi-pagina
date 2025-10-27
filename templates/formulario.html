@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request a Free Estimate - JA Molina Construction</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 90px 20px 20px; /* ← AUMENTADO de 80px a 90px */
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #1e4ca0, #2d5fb8);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .form-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-body {
+            padding: 50px 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label .required {
+            color: #e53935;
+        }
+
+        .form-input {
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            position: relative;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1e4ca0;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(30, 76, 160, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-input:valid:not(:placeholder-shown) {
+            border-color: #4caf50;
+            background: #f8fff8;
+        }
+
+        .form-input:invalid:not(:placeholder-shown) {
+            border-color: #e53935;
+            background: #fff8f8;
+        }
+
+        .form-select {
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #1e4ca0;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(30, 76, 160, 0.15);
+        }
+
+        .form-textarea {
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #1e4ca0;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(30, 76, 160, 0.15);
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #e53935, #c62828);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(229, 57, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(229, 57, 53, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .form-footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            text-align: center;
+            color: #666;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e4ca0;
+            font-weight: 600;
+        }
+
+        /* Navbar del formulario */
+        .form-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 76, 160, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-navbar .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        /* LOGO MEJORADO - TAMAÑO AUMENTADO */
+        .form-navbar .brand-logo {
+            height: 70px; /* ← AUMENTADO de 40px a 70px */
+            width: auto;
+            transition: all 0.3s ease;
+            filter: brightness(1.1) contrast(1.1) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        /* HOVER EFFECT PARA EL LOGO */
+        .form-navbar .brand-logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.3) contrast(1.2) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+        }
+
+        .form-navbar .back-btn-nav {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e4ca0;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .form-navbar .back-btn-nav:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        /* Status message styles */
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 80px 15px 15px; /* ← AJUSTADO padding superior para tablet */
+            }
+            
+            .form-navbar .brand-logo {
+                height: 55px; /* ← TAMAÑO TABLET */
+            }
+            
+            .form-body {
+                padding: 30px 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .form-navbar .nav-content {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 70px 15px 15px; /* ← AJUSTADO para móvil */
+            }
+            
+            .form-navbar .brand-logo {
+                height: 45px; /* ← TAMAÑO MÓVIL */
+            }
+            
+            .form-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .form-header p {
+                font-size: 1rem;
+            }
+            
+            .submit-btn {
+                width: 100%;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="form-navbar">
+        <div class="nav-content">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="JA Molina Construction" class="brand-logo">
+            <a href="{{ url_for('home') }}" class="back-btn-nav">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <div class="form-header">
+            <h1><i class="fas fa-tools"></i> Request Free Estimate</h1>
+            <p>Get a personalized quote for your construction project</p>
+        </div>
+
+        <div class="form-body">
+            <form id="estimateForm" method="POST" action="/form">
+                <!-- ✅ AGREGAR ESTA LÍNEA EXACTAMENTE AQUÍ -->
+                <input type="hidden" name="csrf_token" value="{{ g.csrf_token }}">
+                
+                <div class="form-grid">
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label class="form-label" for="nombre">
+                            <i class="fas fa-user"></i>
+                            Full Name <span class="required">*</span>
+                        </label>
+                        <input 
+                            class="form-input" 
+                            type="text" 
+                            id="nombre" 
+                            name="nombre" 
+                            required 
+                            value="{{ prefill.name if prefill else '' }}"
+                            placeholder="Enter your full name"
+                        >
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label class="form-label" for="email">
+                            <i class="fas fa-envelope"></i>
+                            Email Address <span class="required">*</span>
+                        </label>
+                        <input 
+                            class="form-input" 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required 
+                            value="{{ prefill.email if prefill else '' }}"
+                            placeholder="your.email@example.com"
+                        >
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <label class="form-label" for="phone">
+                            <i class="fas fa-phone"></i>
+                            Phone Number <span class="required">*</span>
+                        </label>
+                        <input 
+                            class="form-input" 
+                            type="tel" 
+                            id="phone" 
+                            name="phone" 
+                            required 
+                            value="{{ prefill.phone if prefill else '' }}"
+                            placeholder="(443) 123-4567"
+                        >
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-group">
+                        <label class="form-label" for="direccion">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Property Address
+                        </label>
+                        <input 
+                            class="form-input" 
+                            type="text" 
+                            id="direccion" 
+                            name="direccion" 
+                            placeholder="123 Main St, City, State, ZIP"
+                        >
+                    </div>
+
+                    <!-- Service Type -->
+                    <div class="form-group">
+                        <label class="form-label" for="trabajo">
+                            <i class="fas fa-wrench"></i>
+                            Type of Service <span class="required">*</span>
+                        </label>
+                        <select class="form-select" id="trabajo" name="trabajo" required>
+                            <option value="" disabled {% if not prefill.service %}selected{% endif %}>Select a service</option>
+                            <option value="metal-roofing" {% if prefill.service == 'metal-roofing' %}selected{% endif %}>Metal Roofing</option>
+                            <option value="shingle-roofing" {% if prefill.service == 'shingle-roofing' %}selected{% endif %}>Shingle Roofing</option>
+                            <option value="siding" {% if prefill.service == 'siding' %}selected{% endif %}>Siding Installation</option>
+                            <option value="landscaping" {% if prefill.service == 'landscaping' %}selected{% endif %}>Landscaping</option>
+                            <option value="patios" {% if prefill.service == 'patios' %}selected{% endif %}>Patios & Decks</option>
+                            <option value="gutters" {% if prefill.service == 'gutters' %}selected{% endif %}>Gutters</option>
+                            <option value="painting" {% if prefill.service == 'painting' %}selected{% endif %}>Painting</option>
+                            <option value="other" {% if prefill.service == 'other' %}selected{% endif %}>Other Services</option>
+                        </select>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="form-group">
+                        <label class="form-label" for="timeline">
+                            <i class="fas fa-calendar-alt"></i>
+                            Project Timeline
+                        </label>
+                        <select class="form-select" id="timeline" name="timeline">
+                            <option value="asap" {% if prefill.timeline == 'asap' %}selected{% endif %}>As soon as possible</option>
+                            <option value="1-month" {% if prefill.timeline == '1-month' %}selected{% endif %}>Within 1 month</option>
+                            <option value="2-3-months" {% if prefill.timeline == '2-3-months' %}selected{% endif %}>2-3 months</option>
+                            <option value="planning" {% if prefill.timeline == 'planning' %}selected{% endif %}>Still planning</option>
+                        </select>
+                    </div>
+
+                    <!-- Project Description -->
+                    <div class="form-group full-width">
+                        <label class="form-label" for="descripcion">
+                            <i class="fas fa-clipboard-list"></i>
+                            Project Description <span class="required">*</span>
+                        </label>
+                        <textarea 
+                            class="form-textarea" 
+                            id="descripcion" 
+                            name="descripcion" 
+                            required 
+                            placeholder="Please describe your project in detail. Include size, materials preferences, timeline, and any specific requirements..."
+                        >{{ prefill.description if prefill else '' }}</textarea>
+                    </div>
+
+                    <!-- Preferred Contact -->
+                    <div class="form-group">
+                        <label class="form-label" for="preferred_contact">
+                            <i class="fas fa-comments"></i>
+                            Preferred Contact Method
+                        </label>
+                        <select class="form-select" id="preferred_contact" name="preferred_contact">
+                            <option value="phone" {% if prefill.contact_method == 'phone' %}selected{% endif %}>Phone Call</option>
+                            <option value="email" {% if prefill.contact_method == 'email' %}selected{% endif %}>Email</option>
+                            <option value="text" {% if prefill.contact_method == 'text' %}selected{% endif %}>Text Message</option>
+                            <option value="any" {% if prefill.contact_method == 'any' %}selected{% endif %}>Any method</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span id="btnText">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Request
+                        </span>
+                        <span class="loading" id="btnLoading">
+                            <div class="spinner"></div>
+                            Sending...
+                        </span>
+                    </button>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                    
+                    <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">
+                        <i class="fas fa-shield-alt"></i>
+                        Your information is secure and will only be used to provide your estimate.
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-footer">
+            <p><strong>Need immediate assistance?</strong></p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:+14439436081" style="color: inherit; text-decoration: none;">(443) 943-6081</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@jamolinaconstruction.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Mon-Sat: 7AM-6PM</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NUEVA SECCIÓN DE CONTACTO RÁPIDO -->
+    <div style="text-align: center; margin: 30px 0;">
+        <p style="color: #666; margin-bottom: 15px;">Questions? Contact us directly:</p>
+        
+        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <a href="tel:+14439436081" style="background: #e53935; color: white; padding: 12px 20px; text-decoration: none; border-radius: 25px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-phone"></i> (443) 943-6081
+            </a>
+            <a href="mailto:misael@jaconstructionllc.com" style="background: #1e4ca0; color: white; padding: 12px 20px; text-decoration: none; border-radius: 25px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-envelope"></i> Email Us
+            </a>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 20px; color: #666; border-top: 1px solid #eee; margin-top: 40px;">
+        <p>📧 <a href="mailto:misael@jaconstructionllc.com" style="color: #1e4ca0;">misael@jaconstructionllc.com</a></p>
+        <p>📞 <a href="tel:+14439436081" style="color: #1e4ca0;">(443) 943-6081</a></p>
+        <p>JA Molina Construction - Professional Services in Maryland</p>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // SOLO auto-format del teléfono
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 6) {
+                value = `(${value.substring(0, 3)}) ${value.substring(3, 6)}-${value.substring(6, 10)}`;
+            } else if (value.length >= 3) {
+                value = `(${value.substring(0, 3)}) ${value.substring(3)}`;
+            }
+            e.target.value = value;
+        });
+    }
+    
+    // Validación visual opcional
+    const inputs = document.querySelectorAll('input[required], select[required], textarea[required]');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function(e) {
+            if (e.target.value.trim()) {
+                e.target.style.borderColor = '#4caf50';
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
+

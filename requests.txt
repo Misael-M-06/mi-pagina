@@ -1,0 +1,63 @@
+Date: 2025-06-29 23:46:10
+Name: Michael Clear
+Email: 67678kj@gmail.com
+Phone: 4436480282
+Address: 123 bellanca ct, middle river MD 21220
+Service: other
+Description: Singles "all house"
+-----------------------------
+--------------------------------------------------
+Time: 2025-10-05T12:20:48.027053
+Name: misael 
+Email: test@gmail.com
+Phone: (443) 123-4556
+Address: 123 earls 
+Service: shingle-roofing
+Timeline: asap
+Contact Method: phone
+Description: metal 
+
+--------------------------------------------------
+Time: 2025-10-05T12:59:02.064482
+Name: jeff 
+Email: test4@iclouyd.com
+Phone: (123) 344-5566
+Address: 1243
+Service: metal-roofing
+Timeline: asap
+Contact Method: phone
+Description: hh
+
+--------------------------------------------------
+Time: 2025-10-05T13:00:56.809824
+Name: Carolina 
+Email: test6@gmail.com
+Phone: (123) 455-5555
+Address: 464664
+Service: metal-roofing
+Timeline: asap
+Contact Method: phone
+Description: metal 
+
+--------------------------------------------------
+Time: 2025-10-05T13:21:00.402318
+Name: Misael
+Email: test7@icloud.com
+Phone: (443) 325-6356
+Address: 123
+Service: metal-roofing
+Timeline: asap
+Contact Method: phone
+Description: ggg
+
+--------------------------------------------------
+Time: 2025-10-25T22:21:27.128567
+Name: Misael Molina 
+Email: misael@jaconstructionllc.com
+Phone: (443) 325-6356
+Address: 519 compass rd 
+Service: metal-roofing
+Timeline: planning
+Contact Method: email
+Description: This Is a Test by Misael Molina 
+
