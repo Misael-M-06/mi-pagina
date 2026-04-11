@@ -2,10 +2,11 @@ import os
 import secrets
 from pathlib import Path
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
-from flask_mail import Mail, Message
 from datetime import datetime
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 # Cargar variables de entorno
 load_dotenv(dotenv_path=Path(__file__).with_name(".env"), override=True)
@@ -61,20 +62,10 @@ def parse_requests_file():
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'dev_secret_change_me')
 
-# ✅ CONFIGURACIÓN DE EMAIL
-app.config['MAIL_SERVER'] = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
-app.config['MAIL_PORT'] = int(os.getenv('SMTP_PORT', 587))
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = os.getenv('EMAIL_ADDRESS')
-app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASSWORD')
-app.config['MAIL_DEFAULT_SENDER'] = os.getenv('EMAIL_ADDRESS')
-
-# Inicializar Flask-Mail
-mail = Mail(app)
-
 # Variables de configuración de email
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
+FROM_EMAIL = os.getenv('FROM_EMAIL', 'misael@jaconstructionllc.com')
 COMPANY_NAME = os.getenv('COMPANY_NAME', 'JA Molina Construction')
 
 # Cookies de sesión — True en producción (HTTPS), False en local (HTTP)
@@ -88,51 +79,50 @@ app.config.update(
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD_HASH = os.getenv('ADMIN_PASSWORD_HASH')
 
-# ✅ FUNCIONES DE EMAIL - MOVIDAS AQUÍ ANTES DE SER USADAS
+# ✅ FUNCIONES DE EMAIL CON SENDGRID
 def send_client_confirmation_email(client_data):
     """Envía email de confirmación al cliente"""
     try:
-        msg = Message(
+        html = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="background: linear-gradient(135deg, #1e4ca0, #2d5fb8); color: white; padding: 30px; text-align: center; border-radius: 10px;">
+                <h1 style="margin: 0; font-size: 2rem;">Thank You, {client_data['name']}!</h1>
+                <p style="margin: 10px 0 0; font-size: 1.1rem;">We received your request for {client_data['service']}</p>
+            </div>
+            <div style="padding: 30px 20px; background: #f8f9fa; border-radius: 10px; margin: 20px 0;">
+                <h2 style="color: #2c3e50; margin-top: 0;">What happens next?</h2>
+                <ul style="color: #555; line-height: 1.6;">
+                    <li><strong>Within 24 hours:</strong> We'll review your request and contact you</li>
+                    <li><strong>Free estimate:</strong> We'll schedule a convenient time to visit your property</li>
+                    <li><strong>Professional service:</strong> Quality work with 1-year warranty</li>
+                </ul>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #e53935;">
+                <h3 style="color: #2c3e50; margin-top: 0;">Your Request Details:</h3>
+                <p><strong>Service:</strong> {client_data['service']}</p>
+                <p><strong>Phone:</strong> {client_data['phone']}</p>
+                <p><strong>Description:</strong> {client_data['description']}</p>
+            </div>
+            <div style="text-align: center; margin: 30px 0;">
+                <p style="color: #666;">Questions? Call us directly:</p>
+                <a href="tel:+14439436081" style="background: #e53935; color: white; padding: 12px 25px; text-decoration: none; border-radius: 25px; font-weight: bold;">📞 (443) 943-6081</a>
+            </div>
+            <div style="text-align: center; padding: 20px; color: #666; font-size: 0.9rem;">
+                <p>{COMPANY_NAME} - Professional Construction Services in Maryland</p>
+                <p>Follow us: <a href="https://www.facebook.com/jamolinaconstruction" style="color: #1e4ca0;">Facebook</a></p>
+            </div>
+        </body>
+        </html>
+        """
+        message = Mail(
+            from_email=FROM_EMAIL,
+            to_emails=client_data['email'],
             subject=f'Thank you for contacting {COMPANY_NAME}!',
-            recipients=[client_data['email']],
-            html=f"""
-            <html>
-            <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <div style="background: linear-gradient(135deg, #1e4ca0, #2d5fb8); color: white; padding: 30px; text-align: center; border-radius: 10px;">
-                    <h1 style="margin: 0; font-size: 2rem;">Thank You, {client_data['name']}!</h1>
-                    <p style="margin: 10px 0 0; font-size: 1.1rem;">We received your request for {client_data['service']}</p>
-                </div>
-                
-                <div style="padding: 30px 20px; background: #f8f9fa; border-radius: 10px; margin: 20px 0;">
-                    <h2 style="color: #2c3e50; margin-top: 0;">What happens next?</h2>
-                    <ul style="color: #555; line-height: 1.6;">
-                        <li><strong>Within 24 hours:</strong> We'll review your request and contact you</li>
-                        <li><strong>Free estimate:</strong> We'll schedule a convenient time to visit your property</li>
-                        <li><strong>Professional service:</strong> Quality work with 1-year warranty</li>
-                    </ul>
-                </div>
-                
-                <div style="background: white; padding: 20px; border-radius: 10px; border-left: 4px solid #e53935;">
-                    <h3 style="color: #2c3e50; margin-top: 0;">Your Request Details:</h3>
-                    <p><strong>Service:</strong> {client_data['service']}</p>
-                    <p><strong>Phone:</strong> {client_data['phone']}</p>
-                    <p><strong>Description:</strong> {client_data['description']}</p>
-                </div>
-                
-                <div style="text-align: center; margin: 30px 0;">
-                    <p style="color: #666;">Questions? Call us directly:</p>
-                    <a href="tel:+14439436081" style="background: #e53935; color: white; padding: 12px 25px; text-decoration: none; border-radius: 25px; font-weight: bold;">📞 (443) 943-6081</a>
-                </div>
-                
-                <div style="text-align: center; padding: 20px; color: #666; font-size: 0.9rem;">
-                    <p>{COMPANY_NAME} - Professional Construction Services in Maryland</p>
-                    <p>Follow us: <a href="https://www.facebook.com/jamolinaconstruction" style="color: #1e4ca0;">Facebook</a></p>
-                </div>
-            </body>
-            </html>
-            """
+            html_content=html
         )
-        mail.send(msg)
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        sg.send(message)
         print(f"✅ Confirmation email sent to {client_data['email']}")
         return True
     except Exception as e:
@@ -142,48 +132,42 @@ def send_client_confirmation_email(client_data):
 def send_admin_notification_email(client_data):
     """Envía notificación al administrador"""
     try:
-        msg = Message(
-            subject=f'🔔 New Request: {client_data["name"]} - {client_data["service"]}',
-            recipients=[ADMIN_EMAIL],
-            html=f"""
-            <html>
-            <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <div style="background: linear-gradient(135deg, #e53935, #c62828); color: white; padding: 20px; text-align: center; border-radius: 10px;">
-                    <h1 style="margin: 0;">🔔 New Lead Alert!</h1>
-                    <p style="margin: 10px 0 0; font-size: 1.1rem;">A potential client just submitted a request</p>
-                </div>
-                
-                <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #e53935;">
-                    <h2 style="color: #2c3e50; margin-top: 0;">Client Information</h2>
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data['name']}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td><td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="mailto:{client_data['email']}">{client_data['email']}</a></td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone:</td><td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="tel:{client_data['phone']}">{client_data['phone']}</a></td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Service:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data['service']}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Timeline:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data.get('timeline', 'Not specified')}</td></tr>
-                        <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Address:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data.get('address', 'Not provided')}</td></tr>
-                    </table>
-                </div>
-                
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
-                    <h3 style="color: #2c3e50; margin-top: 0;">Project Description:</h3>
-                    <p style="background: white; padding: 15px; border-radius: 5px; border-left: 4px solid #e53935;">{client_data['description']}</p>
-                </div>
-                
-                <div style="text-align: center; margin: 20px 0;">
-                    <p style="color: #666; margin-bottom: 15px;">Quick Actions:</p>
-                    <a href="mailto:{client_data['email']}" style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 0 10px;">📧 Email Client</a>
-                    <a href="tel:{client_data['phone']}" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 0 10px;">📞 Call Client</a>
-                </div>
-                
-                <div style="text-align: center; padding: 15px; color: #666; font-size: 0.9rem; border-top: 1px solid #eee;">
-                    <p>Request submitted at: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}</p>
-                </div>
-            </body>
-            </html>
-            """
+        html = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="background: linear-gradient(135deg, #e53935, #c62828); color: white; padding: 20px; text-align: center; border-radius: 10px;">
+                <h1 style="margin: 0;">New Lead Alert!</h1>
+                <p style="margin: 10px 0 0; font-size: 1.1rem;">A potential client just submitted a request</p>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #e53935;">
+                <h2 style="color: #2c3e50; margin-top: 0;">Client Information</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Name:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data['name']}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data['email']}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data['phone']}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Service:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data['service']}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Timeline:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data.get('timeline', 'Not specified')}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Address:</td><td style="padding: 8px; border-bottom: 1px solid #eee;">{client_data.get('address', 'Not provided')}</td></tr>
+                </table>
+            </div>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #2c3e50; margin-top: 0;">Project Description:</h3>
+                <p style="background: white; padding: 15px; border-radius: 5px; border-left: 4px solid #e53935;">{client_data['description']}</p>
+            </div>
+            <div style="text-align: center; padding: 15px; color: #666; font-size: 0.9rem; border-top: 1px solid #eee;">
+                <p>Request submitted at: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}</p>
+            </div>
+        </body>
+        </html>
+        """
+        message = Mail(
+            from_email=FROM_EMAIL,
+            to_emails=ADMIN_EMAIL,
+            subject=f'New Request: {client_data["name"]} - {client_data["service"]}',
+            html_content=html
         )
-        mail.send(msg)
+        sg = SendGridAPIClient(SENDGRID_API_KEY)
+        sg.send(message)
         print(f"✅ Admin notification sent to {ADMIN_EMAIL}")
         return True
     except Exception as e:
