@@ -3,9 +3,27 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JA Molina Construction - Roofing & Exterior Services</title>
+    <title>JA Molina Construction - Roofing & Exterior Services in Maryland</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="JA Molina Construction offers professional roofing, siding, gutters, and exterior services in Maryland. Licensed & insured. Free estimates. Call (443) 943-6081." />
+    <meta name="keywords" content="roofing contractor Maryland, siding installation, gutter repair, exterior construction, JA Molina Construction, free estimate Maryland" />
+    <meta name="author" content="JA Molina Construction" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (Facebook, WhatsApp preview) -->
+    <meta property="og:title" content="JA Molina Construction - Roofing & Exterior Services" />
+    <meta property="og:description" content="Professional roofing, siding, gutters & exterior services in Maryland. Licensed & insured. Free estimates. Call (443) 943-6081." />
+    <meta property="og:image" content="{{ url_for('static', filename='images/tu-logo.png', _external=True) }}" />
+    <meta property="og:url" content="https://www.jaconstructionllc.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/tu-logo.png') }}" />
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/tu-logo.png') }}" />
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
         * {
@@ -79,10 +97,9 @@
         /* Navegación principal */
         .nav {
             position: fixed;
-            top: 35px;
-            left: 0;
-            right: 0;
-            z-index: 1001;
+            top: 60px; /* ← Puede causar overlap en móvil */
+            width: 100%;
+            z-index: 998;
             background: rgba(30, 76, 160, 0.98);
             backdrop-filter: blur(15px);
             box-shadow: 0 8px 32px rgba(30, 76, 160, 0.3);
@@ -333,6 +350,49 @@
             }
         }
 
+        /* Hamburger button - oculto en desktop */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: #fff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: translateY(8.5px) rotate(45deg);
+        }
+
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: translateY(-8.5px) rotate(-45deg);
+        }
+
+        /* CTA móvil dentro del menú - oculto en desktop */
+        .mobile-cta {
+            display: none;
+        }
+
         /* Responsive design */
         @media (max-width: 1200px) {
             .wrap {
@@ -368,74 +428,198 @@
                 flex-direction: column;
                 padding: 6px 0;
                 font-size: 0.8rem;
-                gap: 10px;
+                gap: 4px;
             }
-            
+
             .info-social,
             .info-phone {
                 margin: 0;
             }
-            
+
             .nav {
-                top: 30px;
+                top: 46px;
             }
-            
+
             .wrap {
-                flex-direction: column;
-                height: 85px;
-                padding: 15px 20px;
-                gap: 15px;
+                flex-direction: row;
+                height: 65px;
+                padding: 0 20px;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0;
             }
-            
+
             .brand-logo {
-                height: 70px;
-                max-width: 280px;
+                height: 52px;
+                max-width: 220px;
             }
-            
+
+            .hamburger {
+                display: flex;
+            }
+
             .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
+                display: none;
+                position: absolute;
+                top: 65px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: rgba(20, 58, 140, 0.99);
+                backdrop-filter: blur(15px);
+                padding: 15px 20px 25px;
+                gap: 8px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                max-width: none;
+                flex: none;
                 margin: 0;
             }
-            
+
+            .nav-links.open {
+                display: flex;
+            }
+
             .nav-link {
-                padding: 8px 15px;
-                font-size: 0.85rem;
+                padding: 12px 20px;
+                font-size: 1rem;
+                text-align: center;
+                border-radius: 10px;
+                width: 100%;
             }
-            
-            .btn-cta {
-                padding: 10px 20px;
-                font-size: 0.9rem;
+
+            .nav-actions {
+                display: none;
             }
-            
+
+            .mobile-cta {
+                display: flex;
+                justify-content: center;
+                margin-top: 8px;
+                border-radius: 10px;
+                text-decoration: none;
+            }
+
             .main-section#home {
-                padding-top: 115px !important;
+                padding-top: 111px !important;
             }
         }
 
         @media (max-width: 480px) {
-            .nav-link {
-                padding: 6px 12px;
-                font-size: 0.8rem;
+            .nav {
+                top: 56px;
             }
-            
-            .btn-cta {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-            
-            .brand-logo {
-                height: 60px;
-                max-width: 240px;
-            }
-            
+
             .wrap {
-                height: 75px;
+                height: 60px;
+                padding: 0 15px;
             }
-            
+
+            .brand-logo {
+                height: 46px;
+                max-width: 190px;
+            }
+
+            .nav-links {
+                top: 60px;
+            }
+
             .main-section#home {
-                padding-top: 105px !important;
+                padding-top: 116px !important;
+            }
+        }
+
+        /* ── MOBILE RESPONSIVE FIXES ── */
+        @media (max-width: 768px) {
+
+            /* Hero: una columna */
+            .hero-container {
+                grid-template-columns: 1fr !important;
+                gap: 30px !important;
+                padding: 20px !important;
+            }
+
+            /* Hero texto más pequeño */
+            .hero-container h1 {
+                font-size: 2rem !important;
+                margin-bottom: 15px !important;
+            }
+
+            .hero-container > div:first-child p {
+                font-size: 1rem !important;
+                margin-bottom: 20px !important;
+            }
+
+            /* Badges de garantía en hero */
+            .hero-features {
+                gap: 12px !important;
+            }
+
+            /* Botón hero */
+            .hero-container a[href] {
+                font-size: 1rem !important;
+                padding: 14px 24px !important;
+            }
+
+            /* About: una columna */
+            #about [style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+                padding: 24px !important;
+                gap: 30px !important;
+            }
+
+            /* About: imagen flotante — meterla en flujo normal */
+            #about img[style*="position: absolute"] {
+                position: static !important;
+                width: 100% !important;
+                bottom: auto !important;
+                right: auto !important;
+                margin-top: 15px !important;
+                border: none !important;
+            }
+
+            /* About: título más pequeño */
+            #about h2 {
+                font-size: 1.8rem !important;
+            }
+
+            /* CTA final: heading más pequeño */
+            #home section[style*="1e4ca0"] h2 {
+                font-size: 2rem !important;
+            }
+
+            /* Services: forzar 1 columna en móvil */
+            #services [style*="minmax(350px"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Padding top ajustado en About y Services */
+            #about > div,
+            #services > div {
+                padding-top: 120px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-container {
+                padding: 15px !important;
+            }
+
+            .hero-container h1 {
+                font-size: 1.6rem !important;
+            }
+
+            /* Formulario hero: padding reducido */
+            .hero-container > div:last-child {
+                padding: 24px 16px !important;
+            }
+
+            .hero-container > div:last-child h2 {
+                font-size: 1.5rem !important;
+            }
+
+            #about > div,
+            #services > div {
+                padding-top: 130px !important;
             }
         }
     </style>
@@ -464,11 +648,20 @@
                 <img src="{{ url_for('static', filename='images/tu-logo.png') }}" alt="JA Molina Construction" class="brand-logo">
             </a>
 
-            <div class="nav-links">
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-links" id="nav-links">
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#about" class="nav-link">About us</a>
                 <a href="#services" class="nav-link">Services</a>
                 <a href="#gallery" class="nav-link">Gallery</a>
+                <a href="{{ url_for('form_view') }}" class="btn-cta mobile-cta">
+                    <i class="fas fa-paper-plane"></i>&nbsp;Free Estimate
+                </a>
             </div>
 
             <div class="nav-actions">
@@ -932,7 +1125,7 @@
 
         <!-- ABOUT US SECTION -->
         <section id="about" class="main-section">
-            <div style="padding: 10px 20px 40px 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);">
+            <div style="padding: 150px 20px 40px 20px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);">
                 <div style="max-width: 1200px; margin: 0 auto;">
                     <div style="
                         display: grid; 
@@ -1003,12 +1196,12 @@
                         </div>
 
                         <div style="position: relative;">
-                            <img src="{{ url_for('static', filename='IMG_7021.PNG') }}" alt="JA Molina Construction" style="
+                            <img src="{{ url_for('static', filename='IMG_7021.jpg') }}" alt="JA Molina Construction" style="
                                 width: 100%;
                                 border-radius: 15px;
                                 box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
                             " />
-                            <img src="{{ url_for('static', filename='IMG_7023.PNG') }}" alt="Construction Detail" style="
+                            <img src="{{ url_for('static', filename='IMG_7023.jpg') }}" alt="Construction Detail" style="
                                 position: absolute;
                                 bottom: -30px;
                                 right: -30px;
@@ -1025,21 +1218,8 @@
 
         <!-- SERVICES SECTION -->
         <section id="services" class="main-section">
-            <div style="padding: 10px 20px 40px 20px; background: linear-gradient(135deg, #fff 0%, #f8f9fa 50%, #f1f3f4 100%);">
+            <div style="padding: 150px 20px 40px 20px; background: linear-gradient(135deg, #fff 0%, #f8f9fa 50%, #f1f3f4 100%);">
                 <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-                    <h2 style="
-                        font-size: 2.8rem; 
-                        font-weight: 800; 
-                        color: #2c3e50; 
-                        margin-bottom: 20px;
-                    ">Our Services</h2>
-                    
-                    <p style="
-                        font-size: 1.2rem; 
-                        color: #666; 
-                        max-width: 600px; 
-                        margin: 0 auto 60px;
-                    ">Professional construction and exterior services tailored to your needs</p>
 
                     <div style="
                         display: grid; 
@@ -1246,7 +1426,7 @@
                                 align-items: center;
                                 justify-content: center;
                             ">
-                                <img src="{{ url_for('static', filename='IMG_7021.PNG') }}" alt="Metal Roofing Project" style="
+                                <img src="{{ url_for('static', filename='IMG_7021.jpg') }}" alt="Metal Roofing Project" style="
                                     width: 100%; 
                                     height: 100%; 
                                     object-fit: cover;
@@ -1289,7 +1469,7 @@
                                 align-items: center;
                                 justify-content: center;
                             ">
-                                <img src="{{ url_for('static', filename='IMG_7023.PNG') }}" alt="Exterior Construction" style="
+                                <img src="{{ url_for('static', filename='IMG_7023.jpg') }}" alt="Exterior Construction" style="
                                     width: 100%; 
                                     height: 100%; 
                                     object-fit: cover;
@@ -1312,12 +1492,12 @@
 
                         <!-- Card 3 -->
                         <div style="
-                            position: relative; 
+                            position: relative;
                             width: 100%;
                             max-width: 400px;
-                            border-radius: 15px; 
-                            overflow: hidden; 
-                            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+                            border-radius: 15px;
+                            overflow: hidden;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
                             transition: all 0.3s ease;
                             background: #fff;
                         "
@@ -1333,8 +1513,8 @@
                                 justify-content: center;
                             ">
                                 <img src="{{ url_for('static', filename='IMG_6888.jpg') }}" alt="Complete Projects" style="
-                                    width: 100%; 
-                                    height: 100%; 
+                                    width: 100%;
+                                    height: 100%;
                                     object-fit: cover;
                                     object-position: center;
                                 " />
@@ -1350,6 +1530,135 @@
                             ">
                                 <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 5px;">Complete Projects</h3>
                                 <p style="opacity: 0.9; font-size: 0.9rem;">Comprehensive construction solutions</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div style="
+                            position: relative;
+                            width: 100%;
+                            max-width: 400px;
+                            border-radius: 15px;
+                            overflow: hidden;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+                            transition: all 0.3s ease;
+                            background: #fff;
+                        "
+                        onmouseover="this.style.transform='scale(1.03) translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.25)'"
+                        onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'"
+                        >
+                            <div style="
+                                width: 100%;
+                                height: 280px;
+                                overflow: hidden;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <img src="{{ url_for('static', filename='roof1.jpg') }}" alt="Roofing Project" style="
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    object-position: center;
+                                " />
+                            </div>
+                            <div style="
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+                                color: #fff;
+                                padding: 30px 20px 20px;
+                            ">
+                                <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 5px;">Roofing Project</h3>
+                                <p style="opacity: 0.9; font-size: 0.9rem;">Quality roofing work in Maryland</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 5 -->
+                        <div style="
+                            position: relative;
+                            width: 100%;
+                            max-width: 400px;
+                            border-radius: 15px;
+                            overflow: hidden;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+                            transition: all 0.3s ease;
+                            background: #fff;
+                        "
+                        onmouseover="this.style.transform='scale(1.03) translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.25)'"
+                        onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'"
+                        >
+                            <div style="
+                                width: 100%;
+                                height: 280px;
+                                overflow: hidden;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <img src="{{ url_for('static', filename='roof2.jpg') }}" alt="Exterior Work" style="
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    object-position: center;
+                                " />
+                            </div>
+                            <div style="
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+                                color: #fff;
+                                padding: 30px 20px 20px;
+                            ">
+                                <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 5px;">Exterior Work</h3>
+                                <p style="opacity: 0.9; font-size: 0.9rem;">Professional exterior services</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 6 -->
+                        <div style="
+                            position: relative;
+                            width: 100%;
+                            max-width: 400px;
+                            border-radius: 15px;
+                            overflow: hidden;
+                            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+                            transition: all 0.3s ease;
+                            background: #fff;
+                        "
+                        onmouseover="this.style.transform='scale(1.03) translateY(-5px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.25)'"
+                        onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'"
+                        >
+                            <div style="
+                                width: 100%;
+                                height: 280px;
+                                overflow: hidden;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <img src="{{ url_for('static', filename='roof3.jpg') }}" alt="Finished Roofing" style="
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    object-position: center;
+                                " />
+                            </div>
+                            <div style="
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+                                color: #fff;
+                                padding: 30px 20px 20px;
+                            ">
+                                <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 5px;">Finished Roofing</h3>
+                                <p style="opacity: 0.9; font-size: 0.9rem;">Attention to detail on every project</p>
                             </div>
                         </div>
                     </div>
@@ -1375,16 +1684,13 @@
             </div>
             <div>
                 <h3 style="margin-bottom: 15px;">Follow Us</h3>
-                <a href="https://www.facebook.com/jamolinaconstruction" style="color: #fff; margin-right: 15px;">
+                <a href="https://www.facebook.com/jamolinaconstruction" style="color: #fff;">
                     <i class="fab fa-facebook-f"></i> Facebook
-                </a>
-                <a href="#" style="color: #fff;">
-                    <i class="fab fa-instagram"></i> Instagram
                 </a>
             </div>
         </div>
         <div style="border-top: 1px solid #444; padding-top: 20px;">
-            <p>&copy; 2024 JA Molina Construction. All rights reserved.</p>
+            <p>&copy; 2026 JA Molina Construction. All rights reserved.</p>
         </div>
     </footer>
 
@@ -1420,13 +1726,37 @@
             });
         }
 
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const navLinksMenu = document.getElementById('nav-links');
+
+        hamburger.addEventListener('click', function() {
+            this.classList.toggle('open');
+            navLinksMenu.classList.toggle('open');
+            this.setAttribute('aria-expanded', navLinksMenu.classList.contains('open'));
+        });
+
+        // Cerrar menú al hacer click fuera
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !navLinksMenu.contains(e.target)) {
+                hamburger.classList.remove('open');
+                navLinksMenu.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+        });
+
         // Event listeners para los enlaces de navegación
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href').substring(1);
                 showSection(targetId);
-                
+
+                // Cerrar hamburger al navegar
+                hamburger.classList.remove('open');
+                navLinksMenu.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+
                 // Actualizar URL sin recargar la página
                 if (history.pushState) {
                     history.pushState(null, null, `#${targetId}`);
@@ -1460,8 +1790,7 @@
         });
     </script>
 
-    <!-- Scripts externos -->
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
 
 </body>
 </html>

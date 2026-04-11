@@ -1,6 +1,5 @@
 import os
 import secrets
-import hmac
 from pathlib import Path
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
 from flask_mail import Mail, Message
@@ -78,17 +77,16 @@ mail = Mail(app)
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 COMPANY_NAME = os.getenv('COMPANY_NAME', 'JA Molina Construction')
 
-# Cookies de sesión para producción
+# Cookies de sesión — True en producción (HTTPS), False en local (HTTP)
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
-    SESSION_COOKIE_SECURE=True  # ← CAMBIAR A True para HTTPS
+    SESSION_COOKIE_SECURE=os.getenv('FLASK_ENV') == 'production'
 )
 
 # Credenciales desde .env
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD_HASH = os.getenv('ADMIN_PASSWORD_HASH')
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
 # ✅ FUNCIONES DE EMAIL - MOVIDAS AQUÍ ANTES DE SER USADAS
 def send_client_confirmation_email(client_data):
@@ -219,11 +217,8 @@ def login():
             return render_template('login.html', last_user=username)
 
         ok = (
-            username == ADMIN_USERNAME and (
-                (ADMIN_PASSWORD_HASH and check_password_hash(ADMIN_PASSWORD_HASH, password))
-                or
-                (ADMIN_PASSWORD and hmac.compare_digest(password, ADMIN_PASSWORD))
-            )
+            username == ADMIN_USERNAME and
+            ADMIN_PASSWORD_HASH and check_password_hash(ADMIN_PASSWORD_HASH, password)
         )
         
         if ok:
@@ -248,22 +243,10 @@ def dashboard():
         'dashboard.html',
         username=session.get('username'),
         now=datetime.now(),
-        requests_list=requests_list
+        requests_list=requests_list,
+        admin_email=os.environ.get('ADMIN_EMAIL', '')
     )
 
-@app.route('/admin_m2025_panel', methods=['GET'])
-def admin_panel():
-    if not session.get('logged_in'):
-        flash('Please log in to access the admin panel', 'error')
-        return redirect(url_for('login'))
-    
-    requests_list = parse_requests_file()
-    return render_template(
-        'dashboard.html', 
-        username=session.get('username'), 
-        now=datetime.now(),
-        requests_list=requests_list
-    )
 
 @app.route('/logout')
 def logout():
@@ -317,7 +300,7 @@ def form_view():
         }
 
         try:
-            with open('requests.txt', 'a', encoding='utf-8') as f:
+            with REQUESTS_FILE.open('a', encoding='utf-8') as f:
                 f.write('-' * 50 + '\n')
                 f.write(f'Time: {datetime.now().isoformat()}\n')
                 f.write(f'Name: {name}\n')
@@ -351,7 +334,16 @@ def form_view():
             flash('There was an error processing your request. Please try again.', 'error')
             return render_template('formulario.html')
 
-        return redirect(url_for('home'))
+        return redirect(url_for('thankyou', name=name, email=email, service=client_data['service']))
+
+    return render_template('formulario.html')
+
+@app.route('/thank-you')
+def thankyou():
+    name = request.args.get('name', 'there')
+    email = request.args.get('email', '')
+    service = request.args.get('service', 'your project')
+    return render_template('thankyou.html', name=name, email=email, service=service)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

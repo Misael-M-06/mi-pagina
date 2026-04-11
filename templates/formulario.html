@@ -401,7 +401,7 @@
         </div>
 
         <div class="form-body">
-            <form id="estimateForm" method="POST" action="/form">
+            <form id="estimateForm" method="POST" action="{{ url_for('form_view') }}">
                 <!-- ✅ AGREGAR ESTA LÍNEA EXACTAMENTE AQUÍ -->
                 <input type="hidden" name="csrf_token" value="{{ g.csrf_token }}">
                 
@@ -479,7 +479,7 @@
                             Type of Service <span class="required">*</span>
                         </label>
                         <select class="form-select" id="trabajo" name="trabajo" required>
-                            <option value="" disabled {% if not prefill.service %}selected{% endif %}>Select a service</option>
+                            <option value="" disabled {% if not prefill or not prefill.service %}selected{% endif %}>Select a service</option>
                             <option value="metal-roofing" {% if prefill.service == 'metal-roofing' %}selected{% endif %}>Metal Roofing</option>
                             <option value="shingle-roofing" {% if prefill.service == 'shingle-roofing' %}selected{% endif %}>Shingle Roofing</option>
                             <option value="siding" {% if prefill.service == 'siding' %}selected{% endif %}>Siding Installation</option>
@@ -566,7 +566,7 @@
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
-                    <span>info@jamolinaconstruction.com</span>
+                    <span>misael@jaconstructionllc.com</span>
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-clock"></i>
@@ -576,25 +576,6 @@
         </div>
     </div>
 
-    <!-- NUEVA SECCIÓN DE CONTACTO RÁPIDO -->
-    <div style="text-align: center; margin: 30px 0;">
-        <p style="color: #666; margin-bottom: 15px;">Questions? Contact us directly:</p>
-        
-        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-            <a href="tel:+14439436081" style="background: #e53935; color: white; padding: 12px 20px; text-decoration: none; border-radius: 25px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
-                <i class="fas fa-phone"></i> (443) 943-6081
-            </a>
-            <a href="mailto:misael@jaconstructionllc.com" style="background: #1e4ca0; color: white; padding: 12px 20px; text-decoration: none; border-radius: 25px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
-                <i class="fas fa-envelope"></i> Email Us
-            </a>
-        </div>
-    </div>
-
-    <div style="text-align: center; padding: 20px; color: #666; border-top: 1px solid #eee; margin-top: 40px;">
-        <p>📧 <a href="mailto:misael@jaconstructionllc.com" style="color: #1e4ca0;">misael@jaconstructionllc.com</a></p>
-        <p>📞 <a href="tel:+14439436081" style="color: #1e4ca0;">(443) 943-6081</a></p>
-        <p>JA Molina Construction - Professional Services in Maryland</p>
-    </div>
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {

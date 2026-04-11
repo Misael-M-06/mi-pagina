@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - JA Molina Construction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #1e4ca0, #2d5fb8);
+            padding: 40px 30px 30px;
+            text-align: center;
+        }
+
+        .logo {
+            height: 55px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: popIn 0.6s 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        .checkmark i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .card-header h1 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .card-header p {
+            color: rgba(255,255,255,0.85);
+            font-size: 1rem;
+        }
+
+        .card-body {
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .message {
+            font-size: 1.15rem;
+            color: #374151;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .message strong {
+            color: #1e4ca0;
+        }
+
+        .details-box {
+            background: #f4f8ff;
+            border-left: 4px solid #1e4ca0;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .details-box p {
+            color: #374151;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .details-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .details-box i {
+            color: #1e4ca0;
+            width: 18px;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #e53935, #c62828);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(229, 57, 53, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(229, 57, 53, 0.4);
+        }
+
+        .card-footer {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .contact-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e4ca0;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .contact-item:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .card-header { padding: 30px 20px 20px; }
+            .card-header h1 { font-size: 1.4rem; }
+            .card-body { padding: 30px 20px; }
+            .message { font-size: 1rem; }
+            .contact-row { gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <img src="{{ url_for('static', filename='images/tu-logo.png') }}" alt="JA Molina Construction" class="logo">
+            <div class="checkmark">
+                <i class="fas fa-check"></i>
+            </div>
+            <h1>Thank You, {{ name }}!</h1>
+            <p>Your request has been received successfully.</p>
+        </div>
+
+        <div class="card-body">
+            <p class="message">
+                Thank you for contacting <strong>JA Molina Construction</strong>.<br>
+                We have received your request for <strong>{{ service }}</strong> and our team will reach out to you as soon as possible.<br><br>
+                We hope you have a wonderful day!
+            </p>
+
+            <div class="details-box">
+                <p><i class="fas fa-clock"></i> We typically respond within <strong>24 hours</strong></p>
+                <p><i class="fas fa-envelope"></i> A confirmation email was sent to <strong>{{ email }}</strong></p>
+                <p><i class="fas fa-phone"></i> You can also reach us at <strong>(443) 943-6081</strong></p>
+            </div>
+
+            <a href="{{ url_for('home') }}" class="btn-home">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+
+        <div class="card-footer">
+            <div class="contact-row">
+                <a href="tel:+14439436081" class="contact-item">
+                    <i class="fas fa-phone"></i> (443) 943-6081
+                </a>
+                <a href="mailto:misael@jaconstructionllc.com" class="contact-item">
+                    <i class="fas fa-envelope"></i> misael@jaconstructionllc.com
+                </a>
+                <span class="contact-item" style="cursor: default;">
+                    <i class="fas fa-clock"></i> Mon–Sat: 7AM–6PM
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
