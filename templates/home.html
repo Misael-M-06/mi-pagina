@@ -43,7 +43,8 @@
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             font-size: 0.85rem;
-            padding: 8px 0;
+            padding: 0;
+            height: 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -83,7 +84,7 @@
         .info-phone a {
             color: #fff;
             text-decoration: none;
-            padding: 8px 15px;
+            padding: 4px 15px;
             background: rgba(52, 152, 219, 0.3);
             border-radius: 20px;
             transition: all 0.3s ease;
@@ -97,7 +98,7 @@
         /* Navegación principal */
         .nav {
             position: fixed;
-            top: 60px; /* ← Puede causar overlap en móvil */
+            top: 40px;
             width: 100%;
             z-index: 998;
             background: rgba(30, 76, 160, 0.98);
@@ -419,25 +420,27 @@
             }
             
             .main-section#home {
-                padding-top: 130px !important;
+                padding-top: 150px !important;
             }
         }
 
         @media (max-width: 768px) {
             .info-bar {
-                flex-direction: column;
-                padding: 6px 0;
-                font-size: 0.8rem;
-                gap: 4px;
+                height: 36px;
+                font-size: 0.78rem;
             }
 
-            .info-social,
+            .info-social {
+                margin-left: 10px;
+                gap: 12px;
+            }
+
             .info-phone {
-                margin: 0;
+                margin-right: 10px;
             }
 
             .nav {
-                top: 46px;
+                top: 36px;
             }
 
             .wrap {
@@ -500,13 +503,18 @@
             }
 
             .main-section#home {
-                padding-top: 111px !important;
+                padding-top: 101px !important;
             }
         }
 
         @media (max-width: 480px) {
+            .info-bar {
+                height: 32px;
+                font-size: 0.72rem;
+            }
+
             .nav {
-                top: 56px;
+                top: 32px;
             }
 
             .wrap {
@@ -524,7 +532,7 @@
             }
 
             .main-section#home {
-                padding-top: 116px !important;
+                padding-top: 92px !important;
             }
         }
 
