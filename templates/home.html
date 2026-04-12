@@ -804,19 +804,21 @@
 
                     <!-- Formulario derecho -->
                     <div class="hero-right" style="
-                        background: rgba(255, 255, 255, 0.95);
+                        background: rgba(20, 55, 130, 0.75);
                         border-radius: 20px;
                         padding: 40px;
-                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+                        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
                         backdrop-filter: blur(20px);
+                        border: 1px solid rgba(255, 255, 255, 0.15);
                         animation: slideInRight 0.8s ease-out;
                     ">
                         <h2 style="
-                            font-size: 2.2rem; 
-                            font-weight: 800; 
-                            color: #2c3e50; 
-                            text-align: center; 
+                            font-size: 2.2rem;
+                            font-weight: 800;
+                            color: #ffffff;
+                            text-align: center;
                             margin-bottom: 30px;
+                            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
                         ">
                             Get Your Free Estimate
                         </h2>
@@ -829,14 +831,15 @@
                                 <input type="text" name="name" required placeholder="Full Name *" style="
                                     width: 100%;
                                     padding: 15px 20px;
-                                    border: 2px solid #e0e0e0;
+                                    border: 2px solid rgba(255,255,255,0.3);
                                     border-radius: 10px;
                                     font-size: 1rem;
                                     transition: all 0.3s ease;
-                                    background: #fafafa;
-                                " 
-                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'; this.style.transform='translateY(-2px)'"
-                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'; this.style.transform='translateY(0)'"
+                                    background: rgba(255,255,255,0.15);
+                                    color: #fff;
+                                "
+                                onfocus="this.style.borderColor='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.25)'"
+                                onblur="this.style.borderColor='rgba(255,255,255,0.3)'; this.style.background='rgba(255,255,255,0.15)'"
                                 />
                             </div>
 
@@ -844,14 +847,15 @@
                                 <input type="email" name="email" required placeholder="Email Address *" style="
                                     width: 100%;
                                     padding: 15px 20px;
-                                    border: 2px solid #e0e0e0;
+                                    border: 2px solid rgba(255,255,255,0.3);
                                     border-radius: 10px;
                                     font-size: 1rem;
                                     transition: all 0.3s ease;
-                                    background: #fafafa;
+                                    background: rgba(255,255,255,0.15);
+                                    color: #fff;
                                 "
-                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'; this.style.transform='translateY(-2px)'"
-                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'; this.style.transform='translateY(0)'"
+                                onfocus="this.style.borderColor='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.25)'"
+                                onblur="this.style.borderColor='rgba(255,255,255,0.3)'; this.style.background='rgba(255,255,255,0.15)'"
                                 />
                             </div>
 
@@ -859,14 +863,15 @@
                                 <input type="tel" name="phone" required placeholder="Phone Number *" style="
                                     width: 100%;
                                     padding: 15px 20px;
-                                    border: 2px solid #e0e0e0;
+                                    border: 2px solid rgba(255,255,255,0.3);
                                     border-radius: 10px;
                                     font-size: 1rem;
                                     transition: all 0.3s ease;
-                                    background: #fafafa;
+                                    background: rgba(255,255,255,0.15);
+                                    color: #fff;
                                 "
-                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'; this.style.transform='translateY(-2px)'"
-                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'; this.style.transform='translateY(0)'"
+                                onfocus="this.style.borderColor='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.25)'"
+                                onblur="this.style.borderColor='rgba(255,255,255,0.3)'; this.style.background='rgba(255,255,255,0.15)'"
                                 />
                             </div>
 
@@ -874,24 +879,25 @@
                                 <select name="service" required style="
                                     width: 100%;
                                     padding: 15px 20px;
-                                    border: 2px solid #e0e0e0;
+                                    border: 2px solid rgba(255,255,255,0.3);
                                     border-radius: 10px;
                                     font-size: 1rem;
                                     transition: all 0.3s ease;
-                                    background: #fafafa;
+                                    background: rgba(255,255,255,0.15);
+                                    color: #fff;
                                     cursor: pointer;
                                 "
-                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'"
-                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'"
+                                onfocus="this.style.borderColor='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.25)'"
+                                onblur="this.style.borderColor='rgba(255,255,255,0.3)'; this.style.background='rgba(255,255,255,0.15)'"
                                 >
-                                    <option value="" disabled selected>Select a Service *</option>
-                                    <option value="metal-roofing">Metal Roofing</option>
-                                    <option value="shingle-roofing">Shingle Roofing</option>
-                                    <option value="siding">Siding Installation</option>
-                                    <option value="landscaping">Landscaping</option>
-                                    <option value="patios">Patios & Decks</option>
-                                    <option value="gutters">Gutters</option>
-                                    <option value="other">Other Services</option>
+                                    <option value="" disabled selected style="background:#1e4ca0;">Select a Service *</option>
+                                    <option value="metal-roofing" style="background:#1e4ca0;">Metal Roofing</option>
+                                    <option value="shingle-roofing" style="background:#1e4ca0;">Shingle Roofing</option>
+                                    <option value="siding" style="background:#1e4ca0;">Siding Installation</option>
+                                    <option value="landscaping" style="background:#1e4ca0;">Landscaping</option>
+                                    <option value="patios" style="background:#1e4ca0;">Patios & Decks</option>
+                                    <option value="gutters" style="background:#1e4ca0;">Gutters</option>
+                                    <option value="other" style="background:#1e4ca0;">Other Services</option>
                                 </select>
                             </div>
 
@@ -899,16 +905,17 @@
                                 <textarea name="description" rows="3" placeholder="Tell us about your project..." style="
                                     width: 100%;
                                     padding: 15px 20px;
-                                    border: 2px solid #e0e0e0;
+                                    border: 2px solid rgba(255,255,255,0.3);
                                     border-radius: 10px;
                                     font-size: 1rem;
                                     transition: all 0.3s ease;
-                                    background: #fafafa;
+                                    background: rgba(255,255,255,0.15);
+                                    color: #fff;
                                     resize: vertical;
                                     min-height: 80px;
                                 "
-                                onfocus="this.style.borderColor='#2c3e50'; this.style.background='#fff'"
-                                onblur="this.style.borderColor='#e0e0e0'; this.style.background='#fafafa'"
+                                onfocus="this.style.borderColor='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.25)'"
+                                onblur="this.style.borderColor='rgba(255,255,255,0.3)'; this.style.background='rgba(255,255,255,0.15)'"
                                 ></textarea>
                             </div>
 
