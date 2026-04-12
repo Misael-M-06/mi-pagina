@@ -528,10 +528,21 @@
             }
         }
 
-        /* Placeholder blanco en formulario hero */
+        /* Inputs formulario hero - forzar estilos */
+        #heroForm input,
+        #heroForm select,
+        #heroForm textarea {
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 2px solid rgba(255, 255, 255, 0.35) !important;
+            color: #ffffff !important;
+            border-radius: 10px;
+        }
+
         #heroForm input::placeholder,
         #heroForm textarea::placeholder {
-            color: rgba(255, 255, 255, 0.75);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         #heroForm select option {
@@ -745,7 +756,7 @@
                             margin-bottom: 25px;
                             line-height: 1.2;
                             color: #ffffff;
-                            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+                            text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 4px 20px rgba(0,0,0,0.6);
                         ">
                             Your #1 Roofing & Exterior Services in Maryland
                         </h1>
