@@ -528,6 +528,25 @@
             }
         }
 
+        /* Anular el background blanco global de style.css para el heroForm */
+        #heroForm {
+            background: transparent !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            max-width: none !important;
+            margin: 0 !important;
+        }
+
+        /* Título blanco sólido - anular style.css h1 { color: #2c3e50 } */
+        #home .hero-left h1 {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
+        }
+
         /* Inputs formulario hero - forzar estilos */
         #home #heroForm input[type="text"],
         #home #heroForm input[type="email"],
