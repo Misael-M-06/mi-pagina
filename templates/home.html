@@ -23,7 +23,7 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/tu-logo.png') }}" />
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/tu-logo.png') }}" />
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
         * {
@@ -526,6 +526,12 @@
             .main-section#home {
                 padding-top: 116px !important;
             }
+        }
+
+        /* Anular el overlay negro de style.css .hero::before que bloquea clicks y oscurece texto */
+        .hero::before {
+            pointer-events: none !important;
+            background: transparent !important;
         }
 
         /* Anular el background blanco global de style.css para el heroForm */
