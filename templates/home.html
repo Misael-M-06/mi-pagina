@@ -531,33 +531,57 @@
         /* ── MOBILE RESPONSIVE FIXES ── */
         @media (max-width: 768px) {
 
-            /* Hero: una columna */
+            /* Hero: una columna, texto arriba, formulario abajo */
             .hero-container {
                 grid-template-columns: 1fr !important;
-                gap: 30px !important;
-                padding: 20px !important;
+                gap: 24px !important;
+                padding: 20px 16px !important;
             }
 
-            /* Hero texto más pequeño */
-            .hero-container h1 {
-                font-size: 2rem !important;
-                margin-bottom: 15px !important;
+            /* Hero título: blanco sólido, sin gradiente transparente */
+            .hero-container .hero-left h1 {
+                font-size: 1.9rem !important;
+                margin-bottom: 14px !important;
+                background: none !important;
+                -webkit-background-clip: unset !important;
+                -webkit-text-fill-color: #ffffff !important;
+                background-clip: unset !important;
+                color: #ffffff !important;
+                text-shadow: 0 2px 12px rgba(0,0,0,0.4) !important;
             }
 
-            .hero-container > div:first-child p {
+            /* Párrafo hero más pequeño */
+            .hero-container .hero-left p {
                 font-size: 1rem !important;
-                margin-bottom: 20px !important;
+                margin-bottom: 18px !important;
             }
 
-            /* Badges de garantía en hero */
+            /* Badges: más compactos */
             .hero-features {
-                gap: 12px !important;
+                gap: 10px !important;
+                margin-bottom: 22px !important;
             }
 
-            /* Botón hero */
-            .hero-container a[href] {
-                font-size: 1rem !important;
-                padding: 14px 24px !important;
+            /* Botón rojo hero: ancho completo, táctil */
+            .hero-container .hero-left a {
+                display: flex !important;
+                justify-content: center !important;
+                width: 100% !important;
+                font-size: 1.1rem !important;
+                padding: 16px 20px !important;
+                border-radius: 12px !important;
+                box-sizing: border-box !important;
+            }
+
+            /* Formulario: padding reducido */
+            .hero-container .hero-right {
+                padding: 24px 16px !important;
+                border-radius: 16px !important;
+            }
+
+            .hero-container .hero-right h2 {
+                font-size: 1.5rem !important;
+                margin-bottom: 18px !important;
             }
 
             /* About: una columna */
@@ -601,20 +625,19 @@
 
         @media (max-width: 480px) {
             .hero-container {
-                padding: 15px !important;
+                padding: 15px 12px !important;
             }
 
-            .hero-container h1 {
+            .hero-container .hero-left h1 {
                 font-size: 1.6rem !important;
             }
 
-            /* Formulario hero: padding reducido */
-            .hero-container > div:last-child {
-                padding: 24px 16px !important;
+            .hero-container .hero-right {
+                padding: 20px 14px !important;
             }
 
-            .hero-container > div:last-child h2 {
-                font-size: 1.5rem !important;
+            .hero-container .hero-right h2 {
+                font-size: 1.3rem !important;
             }
 
             #about > div,
