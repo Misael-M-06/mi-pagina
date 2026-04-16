@@ -246,15 +246,7 @@
     <div class="dashboard-body">
       <div class="welcome-message">
         <h1>Welcome back, {{ username }}!</h1>
-        <p>Current time: {{ now.strftime('%B %d, %Y at %I:%M %p') }}</p>
-        
-        <!-- ✅ AGREGAR EMAIL DEL ADMIN -->
-        <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #1e4ca0;">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; color: #1e4ca0;">
-                <i class="fas fa-envelope"></i>
-                <span style="font-weight: 500;">Admin Email: {{ admin_email }}</span>
-            </div>
-        </div>
+        <p id="live-clock" style="font-size: 1rem; color: #555;"></p>
       </div>
 
       <div class="stats-grid">
@@ -264,17 +256,17 @@
           <p>{{ requests_list|length }} request{{ 's' if requests_list|length != 1 else '' }} received</p>
         </a>
 
-        <div class="stat-card">
-          <i class="fas fa-users fa-2x" style="color: #1e4ca0; margin-bottom: 10px;"></i>
-          <h3>Client Management</h3>
-          <p>Manage current projects</p>
-        </div>
+        <a href="#recent-requests" class="stat-card" style="text-decoration: none; color: inherit; display: block;">
+          <i class="fas fa-users fa-2x" style="color: #28a745; margin-bottom: 10px;"></i>
+          <h3>Clients</h3>
+          <p>{{ requests_list|map(attribute='name')|list|unique|list|length }} unique client{{ 's' if requests_list|length != 1 else '' }}</p>
+        </a>
 
-        <div class="stat-card">
-          <i class="fas fa-cogs fa-2x" style="color: #1e4ca0; margin-bottom: 10px;"></i>
-          <h3>System Settings</h3>
-          <p>Configure application</p>
-        </div>
+        <a href="{{ url_for('home') }}" class="stat-card" style="text-decoration: none; color: inherit; display: block;">
+          <i class="fas fa-globe fa-2x" style="color: #764ba2; margin-bottom: 10px;"></i>
+          <h3>View Website</h3>
+          <p>jaconstructionllc.com</p>
+        </a>
       </div>
 
       <!-- SECCIÓN DE SOLICITUDES MEJORADA -->
@@ -337,7 +329,7 @@
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="fas fa-clock" style="color: #28a745;"></i>
-                <span style="color: #28a745; font-weight: 500;">Last Updated: {{ now.strftime('%I:%M %p') }}</span>
+                <span style="color: #28a745; font-weight: 500;" id="last-updated-time">Last Updated: —</span>
               </div>
             </div>
           </div>
@@ -364,5 +356,19 @@
       <p>JA Molina Construction - Professional Services in Maryland</p>
     </div>
   </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const clockEl = document.getElementById('live-clock');
+      if (clockEl) clockEl.textContent = dateStr + ' — ' + timeStr;
+      const updEl = document.getElementById('last-updated-time');
+      if (updEl) updEl.textContent = 'Last Updated: ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
 </body>
 </html>
