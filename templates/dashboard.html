@@ -181,6 +181,99 @@
       color: #d1d5db;
     }
 
+    /* Latest Request card */
+    .latest-card {
+      background: linear-gradient(135deg, #1e4ca0, #2d5fb8);
+      color: white;
+      border-radius: 15px;
+      padding: 25px 30px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      box-shadow: 0 8px 25px rgba(30,76,160,0.25);
+    }
+    .latest-card .latest-label {
+      font-size: 0.8rem;
+      opacity: 0.75;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .latest-card .latest-name {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .latest-card .latest-meta {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .latest-card .latest-actions {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .latest-action-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-call { background: #28a745; color: white; }
+    .btn-call:hover { background: #1e7e34; transform: translateY(-2px); }
+    .btn-email { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); }
+    .btn-email:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+    /* Export button */
+    .export-btn {
+      background: #28a745;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .export-btn:hover { background: #1e7e34; transform: translateY(-1px); }
+
+    /* Action buttons in table */
+    .action-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      margin-bottom: 4px;
+    }
+    .action-call { background: #e8f5e9; color: #28a745; border: 1px solid #a5d6a7; }
+    .action-call:hover { background: #28a745; color: white; }
+    .action-mail { background: #e3f2fd; color: #1e4ca0; border: 1px solid #90caf9; }
+    .action-mail:hover { background: #1e4ca0; color: white; }
+
     /* RESPONSIVE - LOGO MEJORADO */
     @media (max-width: 768px) {
       .dashboard-logo {
@@ -249,43 +342,97 @@
         <p id="live-clock" style="font-size: 1rem; color: #555;"></p>
       </div>
 
-      <div class="stats-grid">
+      <!-- Stat cards -->
+      {% set top_service = namespace(name='—', count=0) %}
+      {% if requests_list %}
+        {% set service_counts = {} %}
+        {% for r in requests_list %}
+          {% if r.service in service_counts %}
+            {% set _ = service_counts.update({r.service: service_counts[r.service] + 1}) %}
+          {% else %}
+            {% set _ = service_counts.update({r.service: 1}) %}
+          {% endif %}
+        {% endfor %}
+        {% for svc, cnt in service_counts.items() %}
+          {% if cnt > top_service.count %}
+            {% set top_service.name = svc %}
+            {% set top_service.count = cnt %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
         <a href="#recent-requests" class="stat-card" style="text-decoration: none; color: inherit; display: block;">
           <i class="fas fa-envelope fa-2x" style="color: #1e4ca0; margin-bottom: 10px;"></i>
-          <h3>Contact Requests</h3>
-          <p>{{ requests_list|length }} request{{ 's' if requests_list|length != 1 else '' }} received</p>
+          <h3>Total Requests</h3>
+          <p style="font-size: 2rem; font-weight: 800; color: #1e4ca0; margin: 4px 0;">{{ requests_list|length }}</p>
         </a>
 
         <a href="#recent-requests" class="stat-card" style="text-decoration: none; color: inherit; display: block;">
           <i class="fas fa-users fa-2x" style="color: #28a745; margin-bottom: 10px;"></i>
-          <h3>Clients</h3>
-          <p>{{ requests_list|map(attribute='name')|list|unique|list|length }} unique client{{ 's' if requests_list|length != 1 else '' }}</p>
+          <h3>Unique Clients</h3>
+          <p style="font-size: 2rem; font-weight: 800; color: #28a745; margin: 4px 0;">{{ requests_list|map(attribute='name')|list|unique|list|length }}</p>
         </a>
+
+        <div class="stat-card">
+          <i class="fas fa-star fa-2x" style="color: #f59e0b; margin-bottom: 10px;"></i>
+          <h3>Top Service</h3>
+          <p style="font-weight: 700; color: #f59e0b; margin: 4px 0;">{{ top_service.name }}</p>
+          {% if top_service.count > 0 %}<p style="font-size: 0.85rem; color: #888;">{{ top_service.count }} request{{ 's' if top_service.count != 1 else '' }}</p>{% endif %}
+        </div>
 
         <a href="{{ url_for('home') }}" class="stat-card" style="text-decoration: none; color: inherit; display: block;">
           <i class="fas fa-globe fa-2x" style="color: #764ba2; margin-bottom: 10px;"></i>
           <h3>View Website</h3>
-          <p>jaconstructionllc.com</p>
+          <p style="color: #764ba2; font-weight: 600;">jaconstructionllc.com</p>
         </a>
       </div>
 
-      <!-- SECCIÓN DE SOLICITUDES MEJORADA -->
-      <div id="recent-requests" class="card" style="margin-top: 30px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <h3 style="margin: 0 0 20px; color: #1e4ca0; display: flex; align-items: center; gap: 10px;">
-          <i class="fas fa-envelope-open-text"></i> Recent Requests
-        </h3>
+      <!-- Latest Request highlight -->
+      {% if requests_list and requests_list|length > 0 %}
+        {% set latest = requests_list[0] %}
+        <div class="latest-card">
+          <div>
+            <div class="latest-label">🔔 Latest Request</div>
+            <div class="latest-name">{{ latest.name }}</div>
+            <div class="latest-meta">
+              <span><i class="fas fa-wrench"></i> {{ latest.service }}</span>
+              <span><i class="fas fa-phone"></i> {{ latest.phone }}</span>
+              {% if latest.time.__class__.__name__ == 'datetime' %}
+                <span><i class="fas fa-clock"></i> {{ latest.time.strftime('%m/%d/%Y %I:%M %p') }}</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="latest-actions">
+            <a href="tel:{{ latest.phone }}" class="latest-action-btn btn-call"><i class="fas fa-phone"></i> Call Now</a>
+            <a href="mailto:{{ latest.email }}" class="latest-action-btn btn-email"><i class="fas fa-envelope"></i> Email</a>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- SECCIÓN DE SOLICITUDES -->
+      <div id="recent-requests" class="card" style="margin-top: 10px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+          <h3 style="margin: 0; color: #1e4ca0; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-envelope-open-text"></i> All Requests
+          </h3>
+          {% if requests_list and requests_list|length > 0 %}
+          <button class="export-btn" onclick="exportCSV()">
+            <i class="fas fa-file-csv"></i> Export CSV
+          </button>
+          {% endif %}
+        </div>
 
         {% if requests_list and requests_list|length > 0 %}
           <div style="overflow-x: auto;">
-            <table class="requests-table">
+            <table class="requests-table" id="requests-table">
               <thead>
                 <tr>
                   <th><i class="fas fa-calendar"></i> Date</th>
                   <th><i class="fas fa-user"></i> Name</th>
-                  <th><i class="fas fa-envelope"></i> Email</th>
-                  <th><i class="fas fa-phone"></i> Phone</th>
                   <th><i class="fas fa-wrench"></i> Service</th>
                   <th><i class="fas fa-comment"></i> Message</th>
+                  <th><i class="fas fa-bolt"></i> Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -299,41 +446,35 @@
                       {{ r.time }}
                     {% endif %}
                   </td>
-                  <td style="font-weight: 600;">{{ r.name }}</td>
                   <td>
-                    <a href="mailto:{{ r.email }}" class="contact-link">{{ r.email }}</a>
+                    <div style="font-weight: 700; color: #1e4ca0;">{{ r.name }}</div>
+                    <small style="color: #888;">{{ r.email }}</small>
                   </td>
-                  <td>
-                    <a href="tel:{{ r.phone }}" class="contact-link">{{ r.phone }}</a>
+                  <td><span class="service-badge">{{ r.service }}</span></td>
+                  <td style="max-width: 260px;">
+                    <div style="max-height: 70px; overflow-y: auto; white-space: pre-wrap; color: #374151; line-height: 1.4; font-size: 0.9rem;">{{ r.description }}</div>
                   </td>
-                  <td>
-                    <span class="service-badge">{{ r.service }}</span>
-                  </td>
-                  <td style="max-width: 300px;">
-                    <div style="max-height: 80px; overflow-y: auto; white-space: pre-wrap; color: #374151; line-height: 1.4;">
-                      {{ r.description }}
-                    </div>
+                  <td style="white-space: nowrap;">
+                    <a href="tel:{{ r.phone }}" class="action-btn action-call"><i class="fas fa-phone"></i> {{ r.phone }}</a><br>
+                    <a href="mailto:{{ r.email }}" class="action-btn action-mail"><i class="fas fa-envelope"></i> Email</a>
                   </td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
-          
-          <!-- Contador de solicitudes mejorado -->
-          <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px; text-align: center;">
-            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <i class="fas fa-chart-bar" style="color: #1e4ca0;"></i>
-                <span style="color: #1e4ca0; font-weight: 600;">Total Requests: {{ requests_list|length }}</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <i class="fas fa-clock" style="color: #28a745;"></i>
-                <span style="color: #28a745; font-weight: 500;" id="last-updated-time">Last Updated: —</span>
-              </div>
+
+          <div style="margin-top: 20px; padding: 12px 15px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px; display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-chart-bar" style="color: #1e4ca0;"></i>
+              <span style="color: #1e4ca0; font-weight: 600;">Total: {{ requests_list|length }} requests</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-clock" style="color: #28a745;"></i>
+              <span style="color: #28a745; font-weight: 500;" id="last-updated-time">Last Updated: —</span>
             </div>
           </div>
-          
+
         {% else %}
           <div class="empty-state">
             <i class="fas fa-inbox"></i>
@@ -369,6 +510,28 @@
     }
     updateClock();
     setInterval(updateClock, 1000);
+
+    function exportCSV() {
+      const rows = [['Date', 'Name', 'Email', 'Phone', 'Service', 'Description']];
+      {% for r in requests_list %}
+      rows.push([
+        {{ (r.time.strftime('%m/%d/%Y %I:%M %p') if r.time.__class__.__name__ == 'datetime' else r.time)|tojson }},
+        {{ r.name|tojson }},
+        {{ r.email|tojson }},
+        {{ r.phone|tojson }},
+        {{ r.service|tojson }},
+        {{ r.description|tojson }}
+      ]);
+      {% endfor %}
+      const csv = rows.map(row => row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ja_molina_requests_' + new Date().toISOString().slice(0,10) + '.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   </script>
 </body>
 </html>
