@@ -498,6 +498,11 @@
     </div>
   </div>
 
+  <script id="csv-data" type="application/json">
+    [["Date","Name","Email","Phone","Service","Description"]{% for r in requests_list %},
+    [{{ (r.time.strftime('%m/%d/%Y %I:%M %p') if r.time.__class__.__name__ == 'datetime' else r.time)|tojson }},{{ r.name|tojson }},{{ r.email|tojson }},{{ r.phone|tojson }},{{ r.service|tojson }},{{ r.description|tojson }}]{% endfor %}]
+  </script>
+
   <script>
     function updateClock() {
       const now = new Date();
@@ -512,17 +517,7 @@
     setInterval(updateClock, 1000);
 
     function exportCSV() {
-      const rows = [['Date', 'Name', 'Email', 'Phone', 'Service', 'Description']];
-      {% for r in requests_list %}
-      rows.push([
-        {{ (r.time.strftime('%m/%d/%Y %I:%M %p') if r.time.__class__.__name__ == 'datetime' else r.time)|tojson }},
-        {{ r.name|tojson }},
-        {{ r.email|tojson }},
-        {{ r.phone|tojson }},
-        {{ r.service|tojson }},
-        {{ r.description|tojson }}
-      ]);
-      {% endfor %}
+      const rows = JSON.parse(document.getElementById('csv-data').textContent);
       const csv = rows.map(row => row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
