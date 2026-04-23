@@ -404,7 +404,11 @@
             <form id="estimateForm" method="POST" action="{{ url_for('form_view') }}">
                 <!-- ✅ AGREGAR ESTA LÍNEA EXACTAMENTE AQUÍ -->
                 <input type="hidden" name="csrf_token" value="{{ g.csrf_token }}">
-                
+                <!-- Honeypot: invisible para humanos, los bots lo llenan -->
+                <div style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+                    <input type="text" name="website" tabindex="-1" autocomplete="off">
+                </div>
+
                 <div class="form-grid">
                     <!-- Full Name -->
                     <div class="form-group">

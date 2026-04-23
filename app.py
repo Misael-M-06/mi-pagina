@@ -1,12 +1,27 @@
 import os
 import secrets
 from pathlib import Path
+from collections import defaultdict
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+
+# Rate limiting: {ip: [timestamp, ...]}
+_rate_limit: dict = defaultdict(list)
+RATE_LIMIT_MAX = 3       # max submissions
+RATE_LIMIT_WINDOW = 3600 # per hour (seconds)
+
+def is_rate_limited(ip: str) -> bool:
+    now = datetime.utcnow()
+    window_start = now - timedelta(seconds=RATE_LIMIT_WINDOW)
+    _rate_limit[ip] = [t for t in _rate_limit[ip] if t > window_start]
+    if len(_rate_limit[ip]) >= RATE_LIMIT_MAX:
+        return True
+    _rate_limit[ip].append(now)
+    return False
 
 # Cargar variables de entorno
 load_dotenv(dotenv_path=Path(__file__).with_name(".env"), override=True)
@@ -257,6 +272,21 @@ def form_view():
         token = request.form.get('csrf_token')
         if not token or token != session.get('csrf_token'):
             flash('Invalid security token. Please try again.', 'error')
+            return render_template('formulario.html')
+
+        # Honeypot: si el campo "website" viene relleno es un bot
+        if request.form.get('website'):
+            print('🤖 Bot detected via honeypot — submission blocked')
+            return redirect(url_for('thankyou',
+                name=request.form.get('nombre', 'there'),
+                email=request.form.get('email', ''),
+                service='your project'))
+
+        # Rate limiting por IP
+        client_ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+        if is_rate_limited(client_ip):
+            print(f'🚫 Rate limit hit for IP {client_ip}')
+            flash('Too many requests. Please try again later.', 'error')
             return render_template('formulario.html')
 
         name = request.form.get('nombre')
